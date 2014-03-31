@@ -112,7 +112,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
             truck = (Truck)truckList.getList.SelectedItem;
 
             //ci spostiamo sulla pagina dettaglio
-            //Frame.Navigate(typeof(TruckCrudPage), truck);
+            Frame.Navigate(typeof(TruckCrudPage), truck);
 
         }
 
@@ -123,7 +123,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         private void Btn_SearchTruck(object sender, RoutedEventArgs e)
         {
-            //Frame.Navigate(typeof(TruckSearchPage));
+            Frame.Navigate(typeof(TruckSearchPage));
         }
 
         private async void Btn_RefreshTruck(object sender, RoutedEventArgs e)

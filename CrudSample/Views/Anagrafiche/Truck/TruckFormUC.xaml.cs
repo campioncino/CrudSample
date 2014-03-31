@@ -27,12 +27,12 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         public delegate void ValueChangedEventHandler(object sender, EventArgs e);
 
-        public event ValueChangedEventHandler ValueChanged;
+        public event ValueChangedEventHandler Button_Clicked;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (ValueChanged != null)
+            if (Button_Clicked != null)
             {
-                ValueChanged(this, EventArgs.Empty);
+                Button_Clicked(this, EventArgs.Empty);
             }
         }
 
@@ -46,10 +46,22 @@ namespace CrudSample.Views.Anagrafiche.Truck
             DependencyProperty.Register("ButtonVisibility", 
                 typeof(Visibility), 
                 typeof(TruckFormUC),
-                new PropertyMetadata(null));
+                null);
+
+       
+
+        //public ImageSource ButtonSource
+        //{
+        //    get { return (ImageSource)GetValue(SourceProperty); }
+        //    set { SetValue(SourceProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty SourceProperty =
+        //    DependencyProperty.Register("Source", typeof(ImageSource), typeof(TruckFormUC),null);
 
 
-        
+
 
         // Truck's values
         public String truckId

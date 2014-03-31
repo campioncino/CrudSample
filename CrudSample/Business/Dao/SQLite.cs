@@ -1312,7 +1312,9 @@ namespace SQLite
 		{
 			if (obj == null) {
 				return 0;
+                
 			}
+            Debug.WriteLine("objecUpdateddd");
 			return Update (obj, obj.GetType ());
 		}
 

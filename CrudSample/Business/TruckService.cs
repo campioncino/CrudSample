@@ -18,7 +18,7 @@ namespace CrudSample.Business
 
         public async static Task<bool> Exist(string truckId)
         {
-            bool exist = await TruckMapper.Exisits(truckId);
+            bool exist = await TruckMapper.Exists(truckId);
             return exist;
         }
         public static async Task SaveTruck(Truck truck)

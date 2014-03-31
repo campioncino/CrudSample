@@ -5,62 +5,77 @@
     xmlns:local="using:CrudSample.Views.Anagrafiche.Truck"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    mc:Ignorable="d" >
+<!--d:DesignHeight="300"
+    d:DesignWidth="400">-->
+ 
     
     <Grid>
-        <Button 
-            Visibility="{Binding Path=ButtonVisibility}" 
-            Content="Button" 
-            x:Name="button"
-            Click="Button_Click"/>
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Truck" FontWeight="Bold" Width="150" FontSize="24" HorizontalAlignment="Left" />
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TruckId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_truckId" InputScope="Formula" Text="{Binding truckId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TruckVin" Text="Vin" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_Vin" Text="{Binding Vin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TruckCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_Code" Text="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TruckUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_Url" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                </StackPanel>
 
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="Truck" FontWeight="Bold" Width="150" FontSize="24" HorizontalAlignment="Left" />
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="TruckId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_truckId" InputScope="Formula" Text="{Binding truckId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TruckVin" Text="Vin" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_Vin" Text="{Binding Vin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TruckCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_Code" Text="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TruckUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_Url" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
+                <!-- dati del transporter-->
+                <StackPanel Margin="0,20,0,20" Orientation="Horizontal">
+                    <TextBlock Text="Transporter" FontWeight="Bold" Width="150" FontSize="24"  HorizontalAlignment="Left" />
+                    <Button 
+                        Margin="20,0,20,0"
+                        Height="100"
+                        Width="300"
+                	    Visibility="{Binding ButtonVisibility}" 
+                	    x:Name="button"
+                        Click="Button_Click"
+                        HorizontalAlignment="Right">
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="../../../Assets/transporter-512.png"/>
+                            <TextBlock Text="Associate Transporter" />
+                        </StackPanel>
+                        
+                    </Button>
 
-            <!-- dati del transporter-->
-            <TextBlock Text="Transporter" FontWeight="Bold" Width="150" FontSize="24" Margin="0,50,0,0" HorizontalAlignment="Left" />
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TransId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trId" InputScope="Formula" Text="{Binding trId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                    <TextBlock x:Name="TransId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_trId" InputScope="Formula" IsReadOnly="True" Text="{Binding trId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TransName" Text="Name" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trName" Text="{Binding trName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TransName" Text="Name" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_trName" IsReadOnly="True" Text="{Binding trName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TransCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trCode" Text="{Binding trCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TransCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_trCode" IsReadOnly="True" Text="{Binding trCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TransUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trUrl" Text="{Binding trUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <TextBlock x:Name="TransUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_trUrl"  IsReadOnly="True" Text="{Binding trUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

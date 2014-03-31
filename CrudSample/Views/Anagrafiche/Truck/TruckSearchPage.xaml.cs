@@ -16,25 +16,29 @@ using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
-namespace CrudSample.Views.Anagrafiche.Transporter
+
+namespace CrudSample.Views.Anagrafiche.Truck
 {
-    using CrudSample.Business.Model;
     using CrudSample.Business;
+    using CrudSample.Business.Model;
+    using CrudSample.Views.Anagrafiche.Transporter;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using CrudSample.Business.Dao;
+    using System.Threading.Tasks;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class TransporterSearchPage : Page
+    
+    public sealed partial class TruckSearchPage : Page
     {
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        public ObservableCollection<Truck> searchList = new ObservableCollection<Truck>();
+        public string selection = null;
+        public Transporter Transporter = null;
+        public static Truck Truck;
 
-        public ObservableCollection<Transporter> searchList = new ObservableCollection<Transporter>();
-
-        public static Transporter transporter { get; set; }
+        
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -53,7 +57,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         }
 
 
-        public TransporterSearchPage()
+        public TruckSearchPage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -74,7 +78,23 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            
+            Transporter = e.NavigationParameter as Transporter;
+            if (Transporter == null) 
+            {
+                Truck = new Truck();
+            }
+                
+
+            if (Transporter != null)
+            {
+                setTransporterValues(Transporter);
+            }
+
+
+            if (Truck != null) 
+            {
+                getValues(Truck);
+            }
         }
 
         /// <summary>
@@ -87,7 +107,9 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+
         }
+
 
         #region NavigationHelper registration
 
@@ -112,28 +134,64 @@ namespace CrudSample.Views.Anagrafiche.Transporter
 
         #endregion
 
-        private async void Btn_SearchTransporter(object sender, RoutedEventArgs e)
+        private async void Btn_SearchTruck(object sender, RoutedEventArgs e)
         {
-            transporter = new Transporter();
-            
-            //se nella ricerca si inserisce una Stringa vuota, per convenzione si attribuisce questo valore
-            
-            //if (!String.IsNullOrEmpty(transporterSearch.trId))
-            //{
-               //transporter.trId = Convert.ToInt32( this.transporterSearch.trId.ToString());
+            setValues(Truck);
+            searchList = await TruckService.Search(Truck);
+            Frame.Navigate(typeof(TruckListPage), searchList);
+        }
 
-            //}
 
-            transporter.trId = this.transporterSearch.trId;
-            transporter.trName = this.transporterSearch.trName;
-            transporter.trUrl = this.transporterSearch.trUrl;
-            transporter.trCode = this.transporterSearch.trCode;
+        private async void Select_Transporter(object sender, EventArgs e)
+        {
+            selection = "fromSearchPage";
+                
+            setValues(Truck);
 
-            searchList = await TransporterService.Search(transporter);
-            Frame.Navigate(typeof(TransporterListPage), searchList);
-            Debug.WriteLine("searchPage trId = "+transporter.trId.ToString());
-            Debug.WriteLine("SearchPage trName = " + transporter.trName.ToString());
-            Debug.WriteLine("Elementi nella lista = "+searchList.Count);
+            Frame.Navigate(typeof(TransporterListPage), selection);
+        }
+
+        //Set objet values from the fields of the form
+        public void setValues(Truck t)
+        {
+
+            //dati  truck
+            t.truckId = this.truckSearch.truckId;
+            t.Code = this.truckSearch.Code;
+            t.Vin = this.truckSearch.Vin;
+            t.Url = this.truckSearch.Url;
+
+            //dati transporter opzionali
+            t.trId = this.truckSearch.trId;
+            t.trName = this.truckSearch.trName;
+            t.trUrl = this.truckSearch.trUrl;
+            t.trCode = this.truckSearch.trCode;
+
+
+        }
+
+        //Get objet values to initialize the form
+        public void getValues(Truck t) 
+        {
+            this.truckSearch.truckId = t.truckId;
+            this.truckSearch.Code = t.Code;
+            this.truckSearch.Vin = t.Vin;
+            this.truckSearch.Url = t.Url;
+
+            this.truckSearch.trId = t.trId;
+            this.truckSearch.trName = t.trName;
+            this.truckSearch.trUrl = t.trUrl;
+            this.truckSearch.trCode = t.trCode;
+        }
+
+
+        //Set object values from Transporter object
+        public void setTransporterValues(Transporter t)
+        {
+            Truck.trId = Transporter.trId;
+            Truck.trName = Transporter.trName;
+            Truck.trCode = Transporter.trCode;
+            Truck.trUrl = Transporter.trUrl;
         }
     }
 }

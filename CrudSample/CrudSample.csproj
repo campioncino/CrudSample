@@ -143,6 +143,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Anagrafiche\Truck\TruckSearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -193,6 +197,9 @@
     <Compile Include="Views\Anagrafiche\Truck\TruckListUC.xaml.cs">
       <DependentUpon>TruckListUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Anagrafiche\Truck\TruckSearchPage.xaml.cs">
+      <DependentUpon>TruckSearchPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -205,8 +212,12 @@
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\zzzSplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\transporter-512.png" />
+    <Content Include="Assets\truck-512.png" />
     <Content Include="Common\ReadMe.txt" />
+    <Content Include="Views\Anagrafiche\Truck\Images\truck-512.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

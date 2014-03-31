@@ -23,6 +23,8 @@ namespace CrudSample.Views.Anagrafiche.Transporter
     
     using CrudSample.Business.Dao;
     using System.Collections.ObjectModel;
+    using CrudSample.Views.Anagrafiche.Truck;
+    using System.Diagnostics;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -35,6 +37,8 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         public ObservableCollection<Transporter> Transporters { get; set; }
 
         public ObservableCollection<Transporter> seachResult = null;
+
+        public string fromTruckPage = null;
 
         public Transporter transporter { get; set; }
 
@@ -85,7 +89,9 @@ namespace CrudSample.Views.Anagrafiche.Transporter
             {
                 Transporters = await TransporterService.GetAll();
             }
-            
+
+            fromTruckPage = e.NavigationParameter as string;
+
             transporterList.getList.ItemsSource = Transporters;
         }
 
@@ -99,8 +105,29 @@ namespace CrudSample.Views.Anagrafiche.Transporter
             //await msgDlg.ShowAsync();
             transporter = (Transporter)transporterList.getList.SelectedItem;
 
-            //ci spostiamo sulla pagina dettaglio
-            Frame.Navigate(typeof(TransporterCrudPage), transporter);
+            // per usare e.Navigate devo ricorrere ad un oggetto nullable
+            // quindi utilizzo uno string....visto che posso arrivare a questa
+            // pagina sia dalla TruckCrudPage, sia che dalla TruckSearchPage, sfutto al meglio
+            // questa cosa
+
+            //se vengo dalla pagina di TruckCrud
+            if (fromTruckPage != null) { 
+                if (fromTruckPage.Contains("Crud"))
+                {
+                    Debug.WriteLine("Entro");
+                    Frame.Navigate(typeof(TruckCrudPage),transporter);
+                }
+                else 
+                {
+                    Frame.Navigate(typeof(TruckSearchPage), transporter);
+                }
+            }
+            else
+            {
+                //ci spostiamo sulla pagina dettaglio
+                Frame.Navigate(typeof(TransporterCrudPage), transporter);
+            }
+            
             
         }
 

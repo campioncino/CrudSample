@@ -16,6 +16,7 @@ using Windows.Storage;
 using System.Collections.ObjectModel;
 
 using CrudSample.Business.Model;
+using System.Diagnostics;
 
 namespace CrudSample.Business.Dao
 {
@@ -38,7 +39,7 @@ namespace CrudSample.Business.Dao
 
         }
 
-        public static async Task<bool> Exisits(string id)
+        public static async Task<bool> Exists(string id)
         {
             Truck truck;
             truck = await GetTransporterById(id);
@@ -53,9 +54,10 @@ namespace CrudSample.Business.Dao
         {
             using (var db = new SQLiteConnection(dbPath))
             {
-                if (await Exisits(truck.trId))
+                if (await Exists(truck.truckId))
                 {
-                    db.Update(truck);
+                    await UpdateTruck(truck);
+                   
                 }
 
 
@@ -70,6 +72,7 @@ namespace CrudSample.Business.Dao
             using (var db = new SQLiteConnection(dbPath))
             {
                 db.Update(truck);
+                Debug.WriteLine("CI PASSI A FA l'UPDATE?"); 
             }
         }
 
@@ -170,7 +173,6 @@ namespace CrudSample.Business.Dao
                 Truck truck = (from p in db.Table<Truck>()
                                      where p.truckId.Equals(id)
                                      select p).FirstOrDefault();
-
                 return truck;
             }
 
