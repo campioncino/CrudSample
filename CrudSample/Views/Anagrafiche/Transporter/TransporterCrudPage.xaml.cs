@@ -24,6 +24,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
     using CrudSample.Business;
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using CrudSample.Views.Anagrafiche.Truck;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -120,7 +121,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
 
         private void Btn_Cancel(object sender, RoutedEventArgs e)
         {
-            Frame.GoBack();
+            Frame.Navigate(typeof(TransporterListPage));
         }
 
         private async void Btn_SaveTransporter(object sender, RoutedEventArgs e)
@@ -162,15 +163,30 @@ namespace CrudSample.Views.Anagrafiche.Transporter
                 || (String.IsNullOrEmpty(this.transporterForm.trCode))
                 || (String.IsNullOrEmpty(this.transporterForm.trUrl)))
             {
-                var msgDlg = new Windows.UI.Popups.MessageDialog("inserisci tutti i campi");
-                msgDlg.DefaultCommandIndex = 1;
-                await msgDlg.ShowAsync();
+                await ShowMessage("compila tutti i dati relativi al transporter");
                 return false;
             }
                 
             else
                 return true;
 
+        }
+
+        public async Task ShowMessage(string myStringMessage)
+        {
+            var msgDlg = new Windows.UI.Popups.MessageDialog(myStringMessage);
+            msgDlg.DefaultCommandIndex = 1;
+            await msgDlg.ShowAsync();
+        }
+
+        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TransporterListPage));
+        }
+
+        private void GoToTruckMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TruckListPage));
         }
     }
 }

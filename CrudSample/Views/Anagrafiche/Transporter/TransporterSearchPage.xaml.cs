@@ -23,6 +23,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using CrudSample.Business.Dao;
+    using CrudSample.Views.Anagrafiche.Truck;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -137,5 +138,16 @@ namespace CrudSample.Views.Anagrafiche.Transporter
             t.trCode = this.transporterSearch.trCode;
 
         }
+
+        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TransporterListPage));
+        }
+
+        private void GoToTruckMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TruckListPage));
+        }
     }
+    
 }

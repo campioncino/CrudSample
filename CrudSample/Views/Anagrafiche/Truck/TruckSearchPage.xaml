@@ -47,9 +47,11 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,0,40,10">
                 <Button x:Name="TruckMenu" Grid.Column="1" Content="Truck Menu" 
                     FontSize="20"
+                    Click="GoToTruckMenu"
                     Height="80"/>
                 <Button x:Name="TransporterMenu" Grid.Column="1" Content="Transporter Menu" 
                     FontSize="20"
+                    Click="GoToTransporterMenu"
                     Height="80"/>
             </StackPanel>
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 

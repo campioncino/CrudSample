@@ -24,29 +24,5 @@ namespace CrudSample.Business.Model
         public string trCode { get; set; }
         public string trUrl { get; set; }
 
-        public Truck(string truckid, string code, string vin, string url,
-            string trid, string trname, string trcode, string trurl) 
-        {
-            truckId = truckid;
-            Code = code;
-            Vin = vin;
-            Url = url;
-            trId = trid;
-            trName = trname;
-            trUrl = trurl;
-            trCode = trcode;
-        }
-
-        public Truck() 
-        {
-            truckId = null;
-            Code = null;
-            Vin = null;
-            Url = null;
-            trId = null;
-            trName = null;
-            trUrl = null;
-            trCode = null;
-        }
     }
 }

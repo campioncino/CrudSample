@@ -252,9 +252,6 @@ namespace CrudSample.Views.Anagrafiche.Truck
                 || (String.IsNullOrEmpty(this.truckForm.Code))
                 || (String.IsNullOrEmpty(this.truckForm.Url)))
             {
-                //var msgDlg = new Windows.UI.Popups.MessageDialog("compila almeno i dati del truck");
-                //msgDlg.DefaultCommandIndex = 1;
-                //await msgDlg.ShowAsync();
                 await this.ShowMessage("compila tutti i dati relativi al Truck");
                 return false;
             }
@@ -269,5 +266,16 @@ namespace CrudSample.Views.Anagrafiche.Truck
             msgDlg.DefaultCommandIndex = 1;
             await msgDlg.ShowAsync();
         }
+
+        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TransporterListPage));
+        }
+
+        private void GoToTruckMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TruckListPage));
+        }
     }
+    
 }

@@ -194,5 +194,16 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         //        //reload Page
         //        this.Frame.Navigate(this.GetType());
         //}
+
+        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TransporterListPage));
+        }
+
+        private void GoToTruckMenu(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(TruckListPage));
+        }
     }
+    
 }
