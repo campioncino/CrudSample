@@ -13,9 +13,19 @@
 
     <Page.Resources>
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="AppName">My Application</x:String>
+        <x:String x:Key="AppName">CrudSample</x:String>
     </Page.Resources>
 
+
+    <!--<Page.TopAppBar>
+        <AppBar IsSticky="True">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Home" Width="140" Height="80" />
+                <Button Content="Page 1" Width="140" Height="80" />
+                <Button Content="Page 2" Width="140" Height="80" />
+            </StackPanel>
+        </AppBar>
+    </Page.TopAppBar>-->
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
@@ -44,6 +54,16 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
+           
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,0,40,10">
+                <Button x:Name="TruckMenu" Grid.Column="1" Content="Truck Menu" 
+                    FontSize="20"
+                    Height="80"/>
+                <Button x:Name="TransporterMenu" Grid.Column="1" Content="Transporter Menu" 
+                    FontSize="20"
+                    Height="80"/>
+            </StackPanel>
+            
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>

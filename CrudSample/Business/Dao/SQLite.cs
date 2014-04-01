@@ -1314,7 +1314,7 @@ namespace SQLite
 				return 0;
                 
 			}
-            Debug.WriteLine("objecUpdateddd");
+            
 			return Update (obj, obj.GetType ());
 		}
 

@@ -104,11 +104,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         public async void truckList_SelectionChangedEvent(object sender, EventArgs e)
         {
-            //Truck selectedT = (Truck)transporterList.MyProperty.SelectedItem;
-
-            //var msgDlg = new Windows.UI.Popups.MessageDialog(selectedT.trName);
-            //msgDlg.DefaultCommandIndex = 1;
-            //await msgDlg.ShowAsync();
+            
             truck = (Truck)truckList.getList.SelectedItem;
 
             //ci spostiamo sulla pagina dettaglio
@@ -132,6 +128,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
             this.Frame.Navigate(this.GetType());
         }
 
+        // funzione Delete
         //private async void Btn_DeleteTruck(object sender, RoutedEventArgs e)
         //{
         //    if (transporter != null)

@@ -142,7 +142,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
         }
 
 
-        private async void Select_Transporter(object sender, EventArgs e)
+        private void Select_Transporter(object sender, EventArgs e)
         {
             selection = "fromSearchPage";
                 
@@ -151,7 +151,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
             Frame.Navigate(typeof(TransporterListPage), selection);
         }
 
-        //Set objet values from the fields of the form
+        //Set objet values from the fields of the FORM
         public void setValues(Truck t)
         {
 
@@ -170,7 +170,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         }
 
-        //Get objet values to initialize the form
+        //Get objet values to initialize the FORM
         public void getValues(Truck t) 
         {
             this.truckSearch.truckId = t.truckId;

@@ -83,7 +83,6 @@ namespace CrudSample.Business.Dao
             {
                 if (await Exisits(trans.trId)){
                     db.Update(trans);
-                    Debug.WriteLine("update");
                 }
                    
 

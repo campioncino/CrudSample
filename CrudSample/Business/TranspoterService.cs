@@ -57,6 +57,15 @@ namespace CrudSample.Business
             return transList;
         }
 
+
+        public async static Task<bool> isEmpty() {
+            ObservableCollection<Transporter> t = await GetAll();
+            bool empty = true;
+            if (t.Count > 0)
+                empty = false;
+            return empty;
+        }
+
         public static async Task<Int32> GetId(int transId)
         {
             Int32 tableId;

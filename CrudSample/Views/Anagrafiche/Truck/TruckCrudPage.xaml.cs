@@ -32,15 +32,14 @@ namespace CrudSample.Views.Anagrafiche.Truck
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public Truck Truck;
+        public static Truck Truck;
 
-        // oggetto per salvare i dati temporanei
-        // mi serve per memorizzare il passaggio da truck a transporter e inverso.
         public static int Id;
-        public static Truck tmp;
+        //public static Truck tmp;
         public Transporter Transporter = null;
         public string selection = null;
         
+        public static int item;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -84,13 +83,6 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
             Transporter = e.NavigationParameter as Transporter;
 
-            if (Transporter != null && tmp!=null)
-            {
-                this.getTransporterValues(Transporter);
-                this.getTruckValues(tmp);
-                
-            }
-
             if(Transporter == null)
                 Truck = e.NavigationParameter as Truck;
             
@@ -98,8 +90,14 @@ namespace CrudSample.Views.Anagrafiche.Truck
             {
                 this.getValues(Truck);
                 Id = Truck.Id;
-                Debug.WriteLine("l'id da modificare è " + Truck.Id);
-                
+            
+            }
+
+            if (Transporter != null && Truck != null)
+            {
+                this.getTransporterValues(Transporter);
+                this.getTruckValues(Truck);
+
             }
           
         }
@@ -146,31 +144,19 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         private async void Btn_SaveTruck(object sender, RoutedEventArgs e)
         {
-            Truck truck = new Truck();
-            //per fare l'update devo costruire completamente l'oggetto
             
+            //per fare l'update devo costruire completamente l'oggetto
 
 
-            if (await checkFields(this.truckForm))
+            bool check = await checkFields(this.truckForm);
+            if (check)
             {
+                Truck = new Truck();
+                Truck.Id = Id;
 
-                truck.Id = Id;
-                Debug.WriteLine("il truck.id in salva è " + truck.Id);
-                //
-                truck.truckId = this.truckForm.truckId;
-                truck.Code = this.truckForm.Code;
-                truck.Vin = this.truckForm.Vin;
-                truck.Url = this.truckForm.Url;
-
-                //dati opzionali
-                truck.trId = this.truckForm.trId;
-                truck.trName = this.truckForm.trName;
-                truck.trUrl = this.truckForm.trUrl;
-                truck.trCode = this.truckForm.trCode;
-                //
-                tmp = null;
-                await TruckService.SaveTruck(truck);
-                Debug.WriteLine("PORCOSIO SALVA = "+truck.trId.ToString());
+                setValues(Truck);
+                await TruckService.SaveTruck(Truck);
+                Truck = null;
                 this.Frame.Navigate(typeof(TruckListPage));
             }
         }
@@ -179,25 +165,26 @@ namespace CrudSample.Views.Anagrafiche.Truck
         {
             selection = "fromCrudPage";
             bool check = await checkFields(this.truckForm);
-            tmp = new Truck();
-            setValues(tmp);
-
-            if(check)
+            bool empty = await TransporterService.isEmpty();
+            Truck = new Truck();
+            setValues(Truck);
+            Truck.Id = Id;
+            if (empty) 
+            {
+                await ShowMessage("non ci sono Transporter nel DB");
+            }
+            if (check && (!empty))
+            {
                 Frame.Navigate(typeof(TransporterListPage), selection);
+            }
+                
+            
+
         }
 
-        //public void setTransporterValues(Transporter t)
-        //{
 
-        //    //transporter.trId = Convert.ToInt32(this.transporterForm.trId);
 
-        //    t.trId = this.truckForm.trId;
-        //    t.trName = this.truckForm.trName;
-        //    t.trUrl = this.truckForm.trUrl;
-        //    t.trCode = this.truckForm.trCode;
-
-        //}
-
+        //get the partial-object values and set the FORM
         public void getTransporterValues(Transporter t)
         {
 
@@ -210,7 +197,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         }
 
-        //get the object values and set the Form Fields
+        //get the partial-object values and set the FORM
         public void getTruckValues(Truck t)
         {
             // prelevo i dati strettamente necessari al truck
@@ -222,8 +209,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
         }
 
 
-        //get the Truck object (truck and transporter)
-
+        //Get objet values to initialize the FORM
         public void getValues(Truck t) 
         {
             // prelevo i dati strettamente necessari al truck
@@ -238,6 +224,9 @@ namespace CrudSample.Views.Anagrafiche.Truck
             
   
         }
+
+
+        //Set objet values from the fields of the FORM
         public void setValues(Truck t)
         {
             
@@ -263,15 +252,22 @@ namespace CrudSample.Views.Anagrafiche.Truck
                 || (String.IsNullOrEmpty(this.truckForm.Code))
                 || (String.IsNullOrEmpty(this.truckForm.Url)))
             {
-                var msgDlg = new Windows.UI.Popups.MessageDialog("compila almeno i dati del truck");
-                msgDlg.DefaultCommandIndex = 1;
-                await msgDlg.ShowAsync();
+                //var msgDlg = new Windows.UI.Popups.MessageDialog("compila almeno i dati del truck");
+                //msgDlg.DefaultCommandIndex = 1;
+                //await msgDlg.ShowAsync();
+                await this.ShowMessage("compila tutti i dati relativi al Truck");
                 return false;
             }
 
             else
                 return true;
 
+        }
+
+        public async Task ShowMessage(string myStringMessage) {
+            var msgDlg = new Windows.UI.Popups.MessageDialog(myStringMessage);
+            msgDlg.DefaultCommandIndex = 1;
+            await msgDlg.ShowAsync();
         }
     }
 }

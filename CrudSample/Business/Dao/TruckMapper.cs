@@ -72,7 +72,6 @@ namespace CrudSample.Business.Dao
             using (var db = new SQLiteConnection(dbPath))
             {
                 db.Update(truck);
-                Debug.WriteLine("CI PASSI A FA l'UPDATE?"); 
             }
         }
 
