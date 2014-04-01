@@ -114,7 +114,6 @@ namespace CrudSample.Views.Anagrafiche.Transporter
             if (fromTruckPage != null) { 
                 if (fromTruckPage.Contains("Crud"))
                 {
-                    Debug.WriteLine("Entro");
                     Frame.Navigate(typeof(TruckCrudPage),transporter);
                 }
                 else 
@@ -184,6 +183,8 @@ namespace CrudSample.Views.Anagrafiche.Transporter
             this.Frame.Navigate(this.GetType());
         }
 
+
+        // funzione delete
         //private async void Btn_DeleteTransporter(object sender, RoutedEventArgs e)
         //{
         //    if (transporter != null)

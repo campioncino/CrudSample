@@ -115,25 +115,27 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private async void Btn_SearchTransporter(object sender, RoutedEventArgs e)
         {
             transporter = new Transporter();
-            
-            //se nella ricerca si inserisce una Stringa vuota, per convenzione si attribuisce questo valore
-            
-            //if (!String.IsNullOrEmpty(transporterSearch.trId))
-            //{
-               //transporter.trId = Convert.ToInt32( this.transporterSearch.trId.ToString());
 
-            //}
+            //transporter.trId = this.transporterSearch.trId;
+            //transporter.trName = this.transporterSearch.trName;
+            //transporter.trUrl = this.transporterSearch.trUrl;
+            //transporter.trCode = this.transporterSearch.trCode;
 
-            transporter.trId = this.transporterSearch.trId;
-            transporter.trName = this.transporterSearch.trName;
-            transporter.trUrl = this.transporterSearch.trUrl;
-            transporter.trCode = this.transporterSearch.trCode;
+            setValues(transporter);
 
             searchList = await TransporterService.Search(transporter);
             Frame.Navigate(typeof(TransporterListPage), searchList);
-            Debug.WriteLine("searchPage trId = "+transporter.trId.ToString());
-            Debug.WriteLine("SearchPage trName = " + transporter.trName.ToString());
-            Debug.WriteLine("Elementi nella lista = "+searchList.Count);
+        }
+
+        //set the object values from the inserted values of the Form Fields
+        public void setValues(Transporter t)
+        {
+
+            t.trId = this.transporterSearch.trId;
+            t.trName = this.transporterSearch.trName;
+            t.trUrl = this.transporterSearch.trUrl;
+            t.trCode = this.transporterSearch.trCode;
+
         }
     }
 }

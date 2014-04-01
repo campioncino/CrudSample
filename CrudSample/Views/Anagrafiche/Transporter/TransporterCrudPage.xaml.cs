@@ -76,14 +76,10 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         {
             /* se l'oggetto è inizializzato è una modifica */
             Transporter = e.NavigationParameter as Transporter;
+
             if (Transporter != null)
             {
-            //    transporterForm.trId = Transporter.trId.ToString();
-            //    transporterForm.trName = Transporter.trName;
-            //    transporterForm.trCode = Transporter.trCode;
-            //    transporterForm.trUrl = Transporter.trUrl;
-                this.getValues(Transporter);
-                
+                this.getValues(Transporter); 
             }
         }
 
@@ -139,34 +135,11 @@ namespace CrudSample.Views.Anagrafiche.Transporter
                 await TransporterService.SaveTransporter(transporter);
                 this.Frame.Navigate(typeof(TransporterListPage));
             }
-
-            ////praticamente è un controller grezzo per far salvare oggetti reali completi
-            //if ((String.IsNullOrEmpty(this.transporterForm.trId))
-            //    || (String.IsNullOrEmpty(this.transporterForm.trName))
-            //    || (String.IsNullOrEmpty(this.transporterForm.trCode))
-            //    || (String.IsNullOrEmpty(this.transporterForm.trUrl))) 
-            //{
-            //    var msgDlg = new Windows.UI.Popups.MessageDialog("inserisci tutti i campi");
-            //    msgDlg.DefaultCommandIndex = 1;
-            //    await msgDlg.ShowAsync();
-            //}
-            //else { 
-            //    // altrimenti salva l'oggetto e vai alla pagina della lista
-            //    transporter.trName = this.transporterForm.trName;
-            //    //transporter.trId = Convert.ToInt32(this.transporterForm.trId);
-            //    transporter.trId = this.transporterForm.trId;
-            //    transporter.trUrl = this.transporterForm.trUrl;
-            //    transporter.trCode = this.transporterForm.trCode;
-            //    this.setValues(transporter);
-            //    await TransporterService.SaveTransporter(transporter);
-            //    this.Frame.Navigate(typeof(TransporterListPage));
-            //}
+            
         }
 
         //set the object values from the inserted values of the Form Fields
         public void setValues(Transporter t) {
-
-            //transporter.trId = Convert.ToInt32(this.transporterForm.trId);
             
             t.trId = this.transporterForm.trId;
             t.trName = this.transporterForm.trName;
