@@ -16,31 +16,16 @@ using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
-namespace CrudSample.Views.Anagrafiche.Transporter
+namespace CrudSample.Views
 {
-    using CrudSample.Business;
-    using CrudSample.Business.Model;
-    
-    using CrudSample.Business.Dao;
-    using System.Collections.ObjectModel;
-    using CrudSample.Views.Anagrafiche.Truck;
-    using System.Diagnostics;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class TransporterListPage : Page
+    public sealed partial class Inherited : BasicPage1
     {
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        public ObservableCollection<Transporter> Transporters { get; set; }
-
-        public ObservableCollection<Transporter> seachResult = null;
-
-        public string fromTruckPage = null;
-
-        public Transporter transporter { get; set; }
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -60,13 +45,16 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         }
 
 
-        public TransporterListPage()
+        public Inherited() 
         {
-            this.InitializeComponent();
+            
+            this.InitializeComponent();this.Content = base.Content;
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+            
         }
+
 
         /// <summary>
         /// Populates the page with content passed during navigation. Any saved state is also
@@ -79,50 +67,10 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session. The state will be null the first time a page is visited.</param>
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            seachResult = e.NavigationParameter as ObservableCollection<Transporter>;
-            if (seachResult != null) {
-                Transporters = seachResult;
-            }
-            else
-            {
-                Transporters = await TransporterService.GetAll();
-            }
-
-            fromTruckPage = e.NavigationParameter as string;
-
-            transporterList.getList.ItemsSource = Transporters;
         }
 
-
-        public async void transporterList_SelectionChangedEvent(object sender, EventArgs e)
-        {
-           
-            transporter = (Transporter)transporterList.getList.SelectedItem;
-
-            //se vengo dalla pagina di TruckCrud
-            if (fromTruckPage != null) { 
-                if (fromTruckPage.Contains("Crud"))
-                {
-                    Frame.Navigate(typeof(TruckCrudPage),transporter);
-                }
-                else 
-                {
-                    Frame.Navigate(typeof(TruckSearchPage), transporter);
-                }
-            }
-            else
-            {
-                //ci spostiamo sulla pagina dettaglio
-                Frame.Navigate(typeof(TransporterCrudPage), transporter);
-            }
-            
-            
-        }
-
-        
-        
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the
         /// page is discarded from the navigation cache.  Values must conform to the serialization
@@ -157,36 +105,5 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         }
 
         #endregion
-
-        private void Btn_AddTransporter(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterCrudPage));
-        }
-
-        private void Btn_SearchTransporter(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterSearchPage));
-        }
-
-        private async void Btn_RefreshTransporter(object sender, RoutedEventArgs e)
-        {
-            Transporters = await TransporterService.GetAll();
-            this.Frame.Navigate(this.GetType());
-        }
-
-
-        // funzione delete
-        //private async void Btn_DeleteTransporter(object sender, RoutedEventArgs e)
-        //{
-        //    if (transporter != null)
-
-        //        await TransporterService.DeleteTransporter(transporter);
-                
-        //        //reload Page
-        //        this.Frame.Navigate(this.GetType());
-        //}
-
-       
     }
-    
 }

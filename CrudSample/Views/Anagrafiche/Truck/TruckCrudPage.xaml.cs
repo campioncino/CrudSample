@@ -171,7 +171,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
             Truck.Id = Id;
             if (empty) 
             {
-                await ShowMessage("non ci sono Transporter nel DB");
+                await Utility.ShowMessage("non ci sono Transporter nel DB");
             }
             if (check && (!empty))
             {
@@ -252,7 +252,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
                 || (String.IsNullOrEmpty(this.truckForm.Code))
                 || (String.IsNullOrEmpty(this.truckForm.Url)))
             {
-                await this.ShowMessage("compila tutti i dati relativi al Truck");
+                await Utility.ShowMessage("compila tutti i dati relativi al Truck");
                 return false;
             }
 
@@ -261,21 +261,6 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         }
 
-        public async Task ShowMessage(string myStringMessage) {
-            var msgDlg = new Windows.UI.Popups.MessageDialog(myStringMessage);
-            msgDlg.DefaultCommandIndex = 1;
-            await msgDlg.ShowAsync();
-        }
-
-        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterListPage));
-        }
-
-        private void GoToTruckMenu(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TruckListPage));
-        }
     }
     
 }

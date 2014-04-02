@@ -20,6 +20,7 @@ using CrudSample.Business.Dao;
 
 using CrudSample.Views.Anagrafiche.Transporter;
 using CrudSample.Views.Anagrafiche.Truck;
+using CrudSample.Views;
 
 namespace CrudSample
 {
@@ -73,11 +74,9 @@ namespace CrudSample
         {
             try
             {
-                //non capisco perchè non posso scrivere
-                // DatabaseConnection.Instance;
-                // facciamo una zezzaria per scirvere 
+                
                 DatabaseConnection.Singleton();
-                //DatabaseConnection c = DatabaseConnection.Instance;
+                
 
             }
             catch (Exception)
@@ -138,6 +137,20 @@ namespace CrudSample
             //spostiamoci sulla nuova pagina
             this.Frame.Navigate(typeof(TransporterListPage));
 
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        
+        private void Btn_Help(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(Inherited));
+        }
+        private void Btn_Refresh(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(BasicPage1));
         }
     }
 }

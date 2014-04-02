@@ -163,7 +163,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
                 || (String.IsNullOrEmpty(this.transporterForm.trCode))
                 || (String.IsNullOrEmpty(this.transporterForm.trUrl)))
             {
-                await ShowMessage("compila tutti i dati relativi al transporter");
+                await Utility.ShowMessage("compila i dati relativi al transporter");
                 return false;
             }
                 
@@ -172,21 +172,5 @@ namespace CrudSample.Views.Anagrafiche.Transporter
 
         }
 
-        public async Task ShowMessage(string myStringMessage)
-        {
-            var msgDlg = new Windows.UI.Popups.MessageDialog(myStringMessage);
-            msgDlg.DefaultCommandIndex = 1;
-            await msgDlg.ShowAsync();
-        }
-
-        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterListPage));
-        }
-
-        private void GoToTruckMenu(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TruckListPage));
-        }
     }
 }

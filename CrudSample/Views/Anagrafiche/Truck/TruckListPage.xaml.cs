@@ -163,14 +163,5 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         #endregion
 
-        private void GoToTransporterMenu(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterListPage));
-        }
-
-        private void GoToTruckMenu(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TruckListPage));
-        }
     }
 }

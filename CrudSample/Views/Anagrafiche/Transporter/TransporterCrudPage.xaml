@@ -9,7 +9,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:UC="using:CrudSample.Views.Anagrafiche.Transporter">
+    xmlns:UC="using:CrudSample.Views.Anagrafiche.Transporter"
+    xmlns:MyTopBar="using:CrudSample.Views.Menu">
 
     <Page.Resources>
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
@@ -44,16 +45,11 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,0,40,10">
-                <Button x:Name="TruckMenu" Grid.Column="1" Content="Truck Menu" 
-                    FontSize="20"
-                    Click="GoToTruckMenu"
-                    Height="80"/>
-                <Button x:Name="TransporterMenu" Grid.Column="1" Content="Transporter Menu" 
-                    FontSize="20"
-                    Click="GoToTransporterMenu"
-                    Height="80"/>
+            
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Margin="0,0,0,10">
+                <MyTopBar:MyTopBar x:Name="myTopBar" HorizontalAlignment="Right"/>
             </StackPanel>
+            
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>

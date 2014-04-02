@@ -147,6 +147,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\BasicPage1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Inherited.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Menu\MyTopBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -164,6 +176,7 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Common\Utility.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -200,6 +213,15 @@
     <Compile Include="Views\Anagrafiche\Truck\TruckSearchPage.xaml.cs">
       <DependentUpon>TruckSearchPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BasicPage1.xaml.cs">
+      <DependentUpon>BasicPage1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Inherited.xaml.cs">
+      <DependentUpon>Inherited.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Menu\MyTopBar.xaml.cs">
+      <DependentUpon>MyTopBar.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -217,7 +239,6 @@
     <Content Include="Assets\transporter-512.png" />
     <Content Include="Assets\truck-512.png" />
     <Content Include="Common\ReadMe.txt" />
-    <Content Include="Views\Anagrafiche\Truck\Images\truck-512.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
