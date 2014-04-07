@@ -25,44 +25,6 @@ namespace CrudSample.Views.Anagrafiche.Truck
             this.DataContext = this;
         }
 
-        public delegate void ValueChangedEventHandler(object sender, EventArgs e);
-
-        public event ValueChangedEventHandler Button_Clicked;
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (Button_Clicked != null)
-            {
-                Button_Clicked(this, EventArgs.Empty);
-            }
-        }
-
-        public Visibility ButtonVisibility
-        {
-            get { return (Visibility)GetValue(ButtonVisibilityProperty); }
-            set { SetValue(ButtonVisibilityProperty, value); }
-        }
-
-        public static DependencyProperty ButtonVisibilityProperty = 
-            DependencyProperty.Register("ButtonVisibility", 
-                typeof(Visibility), 
-                typeof(TruckFormUC),
-                null);
-
-       
-
-        //public ImageSource ButtonSource
-        //{
-        //    get { return (ImageSource)GetValue(SourceProperty); }
-        //    set { SetValue(SourceProperty, value); }
-        //}
-
-        //// Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty SourceProperty =
-        //    DependencyProperty.Register("Source", typeof(ImageSource), typeof(TruckFormUC),null);
-
-
-
-
         // Truck's values
         public String truckId
         {
@@ -163,10 +125,70 @@ namespace CrudSample.Views.Anagrafiche.Truck
                    typeof(TruckFormUC),
                    new PropertyMetadata(""));
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
 
+        /* Gestione click sul bottone */
+
+        public delegate void ValueChangedEventHandler(object sender, EventArgs e);
+
+        public event ValueChangedEventHandler Button_Clicked;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Button_Clicked != null)
+            {
+                Button_Clicked(this, EventArgs.Empty);
+            }
         }
+
+        public Visibility ButtonVisibility
+        {
+            get { return (Visibility)GetValue(ButtonVisibilityProperty); }
+            set { SetValue(ButtonVisibilityProperty, value); }
+        }
+
+        public static DependencyProperty ButtonVisibilityProperty = 
+            DependencyProperty.Register("ButtonVisibility", 
+                typeof(Visibility), 
+                typeof(TruckFormUC),
+                null);
+
+       
+
+        //public ImageSource ButtonSource
+        //{
+        //    get { return (ImageSource)GetValue(SourceProperty); }
+        //    set { SetValue(SourceProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty SourceProperty =
+        //    DependencyProperty.Register("Source", typeof(ImageSource), typeof(TruckFormUC),null);
+
+
+        /* Fine Gestione CLick sul Bottone */
+
+
+        /* Gestione SearchBox */
+        public delegate void SuggestionsRequested(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args);
+
+        public event Windows.Foundation.TypedEventHandler<Windows.UI.Xaml.Controls.SearchBox, SearchBoxSuggestionsRequestedEventArgs> SearchBoxSuggestionsRequested;
+
+        private void SearchBoxSuggestions(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args)
+        {
+            if (SearchBoxSuggestionsRequested != null)
+                SearchBoxSuggestionsRequested(sender, args);
+        }
+
+
+        public delegate void QuerySubmitted(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxQuerySubmittedEventArgs args);
+
+        public event Windows.Foundation.TypedEventHandler<Windows.UI.Xaml.Controls.SearchBox, SearchBoxQuerySubmittedEventArgs> SearchBoxQuerySubmitted;
+        private void SearchBoxQuery(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        {
+            if (SearchBoxQuerySubmitted != null)
+                SearchBoxQuerySubmitted(sender, args);
+        }
+
+        /* Fine Gestione SearchBox */
         
     }
 }

@@ -146,11 +146,11 @@ namespace CrudSample
         
         private void Btn_Help(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(Inherited));
+            
         }
         private void Btn_Refresh(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(BasicPage1));
+
         }
     }
 }

@@ -13,6 +13,7 @@
     <Grid>
         <ScrollViewer>
             <StackPanel Orientation="Vertical">
+                <StackPanel Background="DarkSlateGray">
                 <TextBlock Text="Truck" FontWeight="Bold" Width="150" FontSize="24" HorizontalAlignment="Left" />
                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                     <TextBlock x:Name="TruckId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
@@ -34,11 +35,11 @@
                     <TextBox x:Name="_Url" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                 </StackPanel>
-
+                </StackPanel> <!-- fine truck-->
                 <!-- dati del transporter-->
                 <StackPanel Margin="0,20,0,20" Orientation="Horizontal">
                     <TextBlock Text="Transporter" FontWeight="Bold" Width="150" FontSize="24"  HorizontalAlignment="Left" />
-                    <Button 
+                    <!--<Button 
                         Margin="20,0,20,0"
                         Height="100"
                         Width="300"
@@ -52,17 +53,29 @@
                             <TextBlock Text="Associate Transporter" />
                         </StackPanel>
                         
-                    </Button>
+                    </Button>-->
 
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                    <TextBlock x:Name="TransId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
-                    <TextBox x:Name="_trId" InputScope="Formula" IsReadOnly="True" Text="{Binding trId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="TransName" Text="Name" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <!--questo campo al momento è invisibile è stato sostituito dalla seachbox-->
+                    <TextBox x:Name="_trName" IsReadOnly="True" Text="{Binding trName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"
+                             Visibility="Collapsed"/>
+                    <SearchBox PlaceholderText="Inserisci Nome del transporter" 
+                       Width="300"
+                       Margin="20,0,20,0"                   
+                       SearchHistoryEnabled="False"
+                       FocusOnKeyboardInput="False"
+                       ChooseSuggestionOnEnter="True"
+                       SuggestionsRequested="SearchBoxSuggestions"
+                       QuerySubmitted="SearchBoxQuery"
+                       HorizontalAlignment="Left"
+                    />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                    <TextBlock x:Name="TransName" Text="Name" FontWeight="Bold" Width="150" FontSize="24"/>
-                    <TextBox x:Name="_trName" IsReadOnly="True" Text="{Binding trName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBlock x:Name="TransId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
+                    <TextBox x:Name="_trId" InputScope="Formula" IsReadOnly="True" Text="{Binding trId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0">

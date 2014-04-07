@@ -23,6 +23,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
     using System.Diagnostics;
     using CrudSample.Views.Anagrafiche.Transporter;
     using System.Threading.Tasks;
+    using System.Collections.ObjectModel;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -182,6 +183,56 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         }
 
+        public async void OnSuggest(Windows.UI.Xaml.Controls.SearchBox e, SearchBoxSuggestionsRequestedEventArgs args)
+        {
+            var queryText = args.QueryText != null ? args.QueryText.Trim() : null;
+            if (string.IsNullOrEmpty(queryText)) return;
+            var deferral = args.Request.GetDeferral();
+
+            Transporter tr_search = new Transporter();
+            tr_search.trName = queryText;
+            int count = 0;
+
+            try
+            {
+                var suggestionCollection = args.Request.SearchSuggestionCollection;
+
+                ObservableCollection<Transporter> querySuggestions = await TransporterService.Search(tr_search);
+                if (querySuggestions != null && querySuggestions.Count > 0)
+                {
+                    count = querySuggestions.Count;
+                    for (int i = 0; i <= count; i++)
+                    {
+
+                        suggestionCollection.AppendQuerySuggestion(querySuggestions[i].trName);
+
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+                //Ignore any exceptions that occur trying to find search suggestions.
+            }
+
+            deferral.Complete();
+        }
+
+        private void SearchBox_QueryChanged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
+        {
+            Debug.WriteLine("che fai?");
+        }
+
+        private async void SearchBox_QuerySubmitted(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        {
+            string queryText = args.QueryText;
+            Transporter tr_query = new Transporter();
+            tr_query.trName = queryText;
+            ObservableCollection<Transporter> result = await TransporterService.Search(tr_query);
+            if(result!=null)
+            getTransporterValues(result[0]);
+
+        }
 
 
         //get the partial-object values and set the FORM
