@@ -101,22 +101,24 @@ namespace CrudSample.Views.Anagrafiche.Transporter
            
             transporter = (Transporter)transporterList.getList.SelectedItem;
 
-            //se vengo dalla pagina di TruckCrud
-            if (fromTruckPage != null) { 
-                if (fromTruckPage.Contains("Crud"))
-                {
-                    Frame.Navigate(typeof(TruckCrudPage),transporter);
-                }
-                else 
-                {
-                    Frame.Navigate(typeof(TruckSearchPage), transporter);
-                }
-            }
-            else
-            {
-                //ci spostiamo sulla pagina dettaglio
-                Frame.Navigate(typeof(TransporterCrudPage), transporter);
-            }
+            Frame.Navigate(typeof(TransporterCrudPage), transporter);
+
+            ////se vengo dalla pagina di TruckCrud
+            //if (fromTruckPage != null) { 
+            //    if (fromTruckPage.Contains("Crud"))
+            //    {
+            //        Frame.Navigate(typeof(TruckCrudPage),transporter);
+            //    }
+            //    else 
+            //    {
+            //        Frame.Navigate(typeof(TruckSearchPage), transporter);
+            //    }
+            //}
+            //else
+            //{
+            //    //ci spostiamo sulla pagina dettaglio
+            //    Frame.Navigate(typeof(TransporterCrudPage), transporter);
+            //}
             
             
         }

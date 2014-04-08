@@ -79,23 +79,29 @@ namespace CrudSample.Views.Anagrafiche.Truck
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            Transporter = e.NavigationParameter as Transporter;
-            if (Transporter == null) 
-            {
-                Truck = new Truck();
-            }
+            //Transporter = e.NavigationParameter as Transporter;
+            //if (Transporter == null) 
+            //{
+            //    Truck = new Truck();
+            //    Debug.WriteLine("Transporter==null");
+            //}
                 
 
-            if (Transporter != null)
-            {
-                setTransporterValues(Transporter);
-            }
+            //if (Transporter != null)
+            //{
+            //    setTransporterValues(Transporter);
+            //    Debug.WriteLine("Transporter!=null");
+            //}
 
+            Truck = new Truck();
 
             if (Truck != null) 
             {
                 getValues(Truck);
+                Debug.WriteLine("Truck!=null");
             }
+
+            this.truckSearch.placeholder = "Inserisci nome Transporter";
         }
 
         /// <summary>
@@ -175,7 +181,9 @@ namespace CrudSample.Views.Anagrafiche.Truck
                     for (int i = 0; i <= count; i++)
                     {
 
-                        suggestionCollection.AppendQuerySuggestion(querySuggestions[i].trName);
+                        string query = "[" + querySuggestions[i].trId + "] " + querySuggestions[i].trName;
+                        //suggestionCollection.AppendQuerySuggestion(querySuggestions[i].trName);
+                        suggestionCollection.AppendQuerySuggestion(query);
 
                     }
                 }
@@ -198,7 +206,8 @@ namespace CrudSample.Views.Anagrafiche.Truck
         {
             string queryText = args.QueryText;
             Transporter tr_query = new Transporter();
-            tr_query.trName = queryText;
+            //tr_query.trName = queryText;
+            tr_query.trId = Utility.getBetween(queryText, "[", "]");
             ObservableCollection<Transporter> result = await TransporterService.Search(tr_query);
             if (result != null)
                 getTransporterValues(result[0]);

@@ -24,6 +24,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
     using CrudSample.Views.Anagrafiche.Transporter;
     using System.Threading.Tasks;
     using System.Collections.ObjectModel;
+    using Windows.Storage.Streams;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -82,24 +83,40 @@ namespace CrudSample.Views.Anagrafiche.Truck
         {
             /* se l'oggetto è inizializzato è una modifica */
 
-            Transporter = e.NavigationParameter as Transporter;
+            //Transporter = e.NavigationParameter as Transporter;
 
-            if(Transporter == null)
-                Truck = e.NavigationParameter as Truck;
-            
+            this.truckForm.placeholder = "Inserisci nome Transporter";
+
+            //if (Transporter == null)
+            //{
+            //    Truck = e.NavigationParameter as Truck;
+                
+            //    Debug.WriteLine("transporter == null");
+            //}
+
+            Truck = e.NavigationParameter as Truck;
+
             if (Truck != null)
             {
                 this.getValues(Truck);
                 Id = Truck.Id;
-            
+               
+                //ovvero c'è anche un transporter associato
+                if (!string.IsNullOrEmpty(Truck.trName))
+                {
+                    this.truckForm.placeholder = Truck.trName;
+                }
+                
+                
             }
 
-            if (Transporter != null && Truck != null)
-            {
-                this.getTransporterValues(Transporter);
-                this.getTruckValues(Truck);
-
-            }
+            //if (Transporter != null && Truck != null)
+            //{
+            //    this.getTransporterValues(Transporter);
+            //    this.getTruckValues(Truck);
+            //    this.truckForm.placeholder = Transporter.trName;
+            //    Debug.WriteLine("Transporter!=null && Truck=! null");
+            //}
           
         }
 
@@ -162,30 +179,30 @@ namespace CrudSample.Views.Anagrafiche.Truck
             }
         }
 
-        private async void Select_Transporter(object sender, EventArgs e)
-        {
-            selection = "fromCrudPage";
-            bool check = await checkFields(this.truckForm);
-            bool empty = await TransporterService.isEmpty();
-            Truck = new Truck();
-            setValues(Truck);
-            Truck.Id = Id;
-            if (empty) 
-            {
-                await Utility.ShowMessage("non ci sono Transporter nel DB");
-            }
-            if (check && (!empty))
-            {
-                Frame.Navigate(typeof(TransporterListPage), selection);
-            }
-                
-            
-
-        }
+        //private async void Select_Transporter(object sender, EventArgs e)
+        //{
+        //    Debug.WriteLine("is it called?");
+        //    selection = "fromCrudPage";
+        //    bool check = await checkFields(this.truckForm);
+        //    bool empty = await TransporterService.isEmpty();
+        //    Truck = new Truck();
+        //    setValues(Truck);
+        //    Truck.Id = Id;
+        //    if (empty) 
+        //    {
+        //        await Utility.ShowMessage("non ci sono Transporter nel DB");
+        //    }
+        //    if (check && (!empty))
+        //    {
+        //        Frame.Navigate(typeof(TransporterListPage), selection);
+        //    }
+        
+        //}
 
         public async void OnSuggest(Windows.UI.Xaml.Controls.SearchBox e, SearchBoxSuggestionsRequestedEventArgs args)
         {
             var queryText = args.QueryText != null ? args.QueryText.Trim() : null;
+            
             if (string.IsNullOrEmpty(queryText)) return;
             var deferral = args.Request.GetDeferral();
 
@@ -196,16 +213,19 @@ namespace CrudSample.Views.Anagrafiche.Truck
             try
             {
                 var suggestionCollection = args.Request.SearchSuggestionCollection;
+                
 
                 ObservableCollection<Transporter> querySuggestions = await TransporterService.Search(tr_search);
+
+
                 if (querySuggestions != null && querySuggestions.Count > 0)
                 {
                     count = querySuggestions.Count;
                     for (int i = 0; i <= count; i++)
                     {
-
-                        suggestionCollection.AppendQuerySuggestion(querySuggestions[i].trName);
-
+                        string query = "[" + querySuggestions[i].trId + "] " + querySuggestions[i].trName;
+                        //suggestionCollection.AppendQuerySuggestion(querySuggestions[i].trName);
+                        suggestionCollection.AppendQuerySuggestion(query);
                     }
                 }
 
@@ -213,6 +233,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
             catch (Exception)
             {
                 //Ignore any exceptions that occur trying to find search suggestions.
+                Debug.WriteLine("Exception rilevate nella searchBox");
             }
 
             deferral.Complete();
@@ -227,10 +248,13 @@ namespace CrudSample.Views.Anagrafiche.Truck
         {
             string queryText = args.QueryText;
             Transporter tr_query = new Transporter();
-            tr_query.trName = queryText;
+            tr_query.trId = Utility.getBetween(queryText, "[", "]");
+            //tr_query.trName = queryText;
             ObservableCollection<Transporter> result = await TransporterService.Search(tr_query);
             if(result!=null)
             getTransporterValues(result[0]);
+
+            
 
         }
 

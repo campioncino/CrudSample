@@ -168,6 +168,8 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
 
         /* Gestione SearchBox */
+        
+
         public delegate void SuggestionsRequested(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args);
 
         public event Windows.Foundation.TypedEventHandler<Windows.UI.Xaml.Controls.SearchBox, SearchBoxSuggestionsRequestedEventArgs> SearchBoxSuggestionsRequested;
@@ -188,6 +190,18 @@ namespace CrudSample.Views.Anagrafiche.Truck
                 SearchBoxQuerySubmitted(sender, args);
         }
 
+
+        public String placeholder
+        {
+            get { return (String)GetValue(PlaceHolderTextProperty); }
+            set { SetValue(PlaceHolderTextProperty, value); }
+        }
+
+        public static readonly DependencyProperty PlaceHolderTextProperty =
+               DependencyProperty.Register("placeholder",
+                   typeof(String),
+                   typeof(TruckFormUC),
+                   new PropertyMetadata(""));
         /* Fine Gestione SearchBox */
         
     }
