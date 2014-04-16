@@ -156,10 +156,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Menu\MyTopBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -220,9 +216,6 @@
     </Compile>
     <Compile Include="Views\Anagrafiche\Truck\TruckSearchPage.xaml.cs">
       <DependentUpon>TruckSearchPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Menu\MyTopBar.xaml.cs">
-      <DependentUpon>MyTopBar.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
