@@ -2,6 +2,7 @@
 using CrudSample.Views.Anagrafiche.Truck;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -31,6 +32,7 @@ namespace CrudSample.Views.Menu
             
         }
 
+        
  
         Page rootPage = null;
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -51,6 +53,19 @@ namespace CrudSample.Views.Menu
             }
         }
 
+        private void selected(object sender, TappedRoutedEventArgs e)
+        {
+
+            FrameworkElement element = sender as FrameworkElement;
+
+            if (element != null)
+            {
+                Debug.WriteLine(element.Name);
+
+
+            }
+
+        }
         private void GoToTruckMenu(object sender, RoutedEventArgs e)
         {
             topBarFrame.Navigate(typeof(TruckListPage), this);
@@ -60,6 +75,7 @@ namespace CrudSample.Views.Menu
         {
             topBarFrame.Navigate(typeof(TransporterListPage), this);
         }
+
     }
 }
 

@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Page.TopAppBar >
+    <Page.TopAppBar>
         <AppBar x:Name="globalAppBar" Padding="10,0,10,0"
                 Visibility="Visible" IsOpen="True" IsSticky="True">
             <AppBar.Resources>
@@ -33,35 +33,25 @@
                 </StackPanel>
                 <StackPanel x:Name="rightCommandPanel" 
                             Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="TruckMenu"   
-                    FontSize="20"
-                    Click="GoToTruckMenu"
-                    AutomationProperties.Name="TruckMenu"
-                    Width="250"
-                    Height="80">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="ms-appx:///Assets/truck-512.png" Stretch="Uniform" />
-                            <TextBlock Text="Truck&#x0a; Menu" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="25,0,0,0"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="TransporterMenu"
-                    FontSize="20"
-                    Click="GoToTransporterMenu"
-                    AutomationProperties.Name="Transporter"
-                    Width="250"
-                    Height="80">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="ms-appx:///Assets/transporter-512.png" Stretch="Uniform"/>
-                            <TextBlock Text="Transporter&#x0a; Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0"/>
-                        </StackPanel>
-                    </Button>
+                 <AppBarButton Content="Show" x:Name="ShowButton" Icon="More">
+                        <Button.Flyout>
+                            <MenuFlyout x:Name="menufly" >
+                                <MenuFlyoutItem Text="TruckMenu" 
+                                                Click="GoToTruckMenu" FontSize="20"/>
+
+                                <MenuFlyoutItem Text="TransporterMenu"
+                                                Click="GoToTransporterMenu" FontSize="20"/>
+                                
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </AppBarButton>
                 </StackPanel>
             </Grid>
         </AppBar>
     </Page.TopAppBar>
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-        <Frame x:Name="topBarFrame" Margin="31,270,-31,-270"/>
-    </Grid>
+        <Frame x:Name="topBarFrame" />
+   </Grid>
 
 </Page>

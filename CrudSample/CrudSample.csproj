@@ -104,6 +104,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Page Include="Views\Anagrafiche\Transporter\TransporterMD.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Menu\GlobalPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,6 +179,9 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Common\Utility.cs" />
+    <Compile Include="Views\Anagrafiche\Transporter\TransporterMD.xaml.cs">
+      <DependentUpon>TransporterMD.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Menu\GlobalPage.xaml.cs">
       <DependentUpon>GlobalPage.xaml</DependentUpon>
     </Compile>

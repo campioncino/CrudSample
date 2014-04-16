@@ -1,6 +1,9 @@
-﻿using CrudSample.Common;
+﻿using CrudSample.Business;
+using CrudSample.Business.Model;
+using CrudSample.Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -18,24 +21,20 @@ using Windows.UI.Xaml.Navigation;
 
 namespace CrudSample.Views.Anagrafiche.Transporter
 {
-    using CrudSample.Business;
     using CrudSample.Business.Model;
-    
-    using CrudSample.Business.Dao;
-    using System.Collections.ObjectModel;
     using System.Diagnostics;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class TransporterListPage : Page
+    public sealed partial class TransporterMD : Page
     {
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public ObservableCollection<TransporterExt> list { get; set; }
-
-        public ObservableCollection<TransporterExt> seachResult = null;
+        public ObservableCollection<TransporterExt> transporterList { get; set; }
+        public ObservableCollection<TruckExt> truckList = new ObservableCollection<TruckExt>();
+        //public ObservableCollection<TransporterExt> seachResult = null;
 
         public TransporterExt transporter { get; set; }
 
@@ -57,7 +56,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         }
 
 
-        public TransporterListPage()
+        public TransporterMD()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -78,31 +77,16 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            seachResult = e.NavigationParameter as ObservableCollection<TransporterExt>;
-            if (seachResult != null) {
-                list = seachResult;
-            }
-            else
-            {
-                list = await TransporterService.GetAll();
-            }
+            
+            transporterList = await TransporterService.GetAll();
 
-            transporterList.getList.ItemsSource = list;
+            transporterListMD.getList.ItemsSource = transporterList;
+
+            if (truckList.Count > 0)
+                truckListMD.getList.ItemsSource = truckList;
+
         }
 
-
-        public async void transporterList_SelectionChangedEvent(object sender, EventArgs e)
-        {
-           
-            transporter = (TransporterExt)transporterList.getList.SelectedItem;
-
-            Frame.Navigate(typeof(TransporterCrudPage), transporter);
-            
-            
-        }
-
-        
-        
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the
         /// page is discarded from the navigation cache.  Values must conform to the serialization
@@ -114,6 +98,29 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
         }
+
+        public async void transporterList_SelectionChangedEvent(object sender, EventArgs e)
+        {
+
+            transporter = (TransporterExt)transporterListMD.getList.SelectedItem;
+
+            TruckExt truck = new TruckExt();
+            truck.trId=transporter.trId;
+            truckList = await TruckService.Search(truck);
+            //Debug.WriteLine(truckList.Count);
+            truckListMD.getList.ItemsSource = truckList;
+
+
+        }
+
+
+        public async void truckList_SelectionChangedEvent(object sender, EventArgs e)
+        {
+
+           await Utility.ShowMessage("nessuna azione");
+
+        }
+
 
         #region NavigationHelper registration
 
@@ -129,6 +136,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -137,28 +145,5 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         }
 
         #endregion
-
-        private void Btn_AddTransporter(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterCrudPage));
-        }
-
-        private void Btn_SearchTransporter(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(TransporterSearchPage));
-        }
-
-        private async void Btn_RefreshTransporter(object sender, RoutedEventArgs e)
-        {
-            list = await TransporterService.GetAll();
-            this.Frame.Navigate(this.GetType());
-        }
-
-        private async void Btn_MDTransporter(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(TransporterMD));
-        }
-
     }
-    
 }

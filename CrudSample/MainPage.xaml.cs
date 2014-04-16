@@ -60,10 +60,11 @@ namespace CrudSample
 
         public MainPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();   
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
         }
 
         /// <summary>
@@ -127,18 +128,6 @@ namespace CrudSample
             this.Frame.Navigate(typeof(TransporterListPage));
         }
 
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         
-        private void Btn_Help(object sender, RoutedEventArgs e)
-        {
-            
-        }
-        private void Btn_Refresh(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(GlobalPage));
-        }
     }
 }
