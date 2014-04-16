@@ -8,9 +8,8 @@ using SQLite;
 
 namespace CrudSample.Business.Model
 {
-    public class Entity
+    [Table("VE_TRANSPORTER")]
+    public class TransporterExt : Transporter
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
     }
 }

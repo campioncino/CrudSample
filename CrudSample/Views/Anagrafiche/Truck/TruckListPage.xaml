@@ -17,16 +17,6 @@
         <x:String x:Key="AppName">CrudSample</x:String>
     </Page.Resources>
 
-
-    <!--<Page.TopAppBar>
-        <AppBar IsSticky="True">
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Home" Width="140" Height="80" />
-                <Button Content="Page 1" Width="140" Height="80" />
-                <Button Content="Page 2" Width="140" Height="80" />
-            </StackPanel>
-        </AppBar>
-    </Page.TopAppBar>-->
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
@@ -63,11 +53,11 @@
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
-        <UC:TruckListUC x:Name="truckList"
-                                  SelectionChangedEvent="truckList_SelectionChangedEvent"
-                                  Grid.Row="1" Margin="120,30,40,120">
-
+        
+        <UC:TruckListUC x:Name="truckList" Grid.Row="1" Margin="120,30,40,120"
+                        SelectionChangedEvent="truckList_SelectionChangedEvent">
         </UC:TruckListUC>
+        
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Visibility="Visible" IsOpen="True" IsSticky="True">
@@ -77,7 +67,6 @@
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="New" Icon="Add" Click="Btn_AddTruck"/>
                 <AppBarButton Label="Search" Icon="Find" Click="Btn_SearchTruck" />
-                <!--<AppBarButton Label="Delete" Icon="Delete" Click="Btn_DeleteTransporter" />-->
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

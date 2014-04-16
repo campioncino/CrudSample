@@ -4,25 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SQLite;
 namespace CrudSample.Business.Model
 {
-    public class Truck : Entity
+    [Table("TRUCK")]
+    public class Truck
     {
-        /*
-        * truck
-        */
-        public string truckId { get; set; }
-        public string Code { get; set; }
-        public string Vin { get; set; }
-        public string Url { get; set; }
+        [PrimaryKey, AutoIncrement]
+        [Column("TRUCK_ID")]
+        public int? truckId { get; set; }
+        
+        [Column("CODE")]
+        public string code { get; set; }
 
-        /*
-         * transporter
-         */
-        public string trId { get; set; }
-        public string trName { get; set; }
-        public string trCode { get; set; }
-        public string trUrl { get; set; }
+        [Column("VIN")]
+        public string vin { get; set; }
 
+        [Column("URL")]
+        public string url { get; set; }
+
+        [Column("TR_ID")]
+        public int? trId { get; set; }
+        
     }
 }

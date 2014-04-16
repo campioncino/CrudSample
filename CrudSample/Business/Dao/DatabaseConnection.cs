@@ -13,17 +13,18 @@ using Windows.Storage;
 using SQLite;
 
 using CrudSample.Business.Model;
+using System.Diagnostics;
 
 namespace CrudSample.Business.Dao
 {
     public sealed class DatabaseConnection
     {
-        private static volatile DatabaseConnection instance;
-        private static object syncRoot = new Object();
+        //private static volatile DatabaseConnection instance;
+        //private static object syncRoot = new Object();
 
-        private static String _dbPath = String.Empty;
+        private static String _dbPath = string.Empty;
 
-        private static String dbPath
+        public static String dbPath
         {
             get
             {
@@ -38,42 +39,15 @@ namespace CrudSample.Business.Dao
         }
 
 
-        private DatabaseConnection()
+        public static bool CheckDatabase()
         {
-            //creiamo una connessione
-            using (SQLiteConnection db = new SQLiteConnection(dbPath))
-            {
-                //utile per il debug, il trace
-                db.Trace = true;
-
-                //creiamo una tabella, se non esiste
-                db.CreateTable<Truck>();
-                db.CreateTable<Transporter>();
+            using (SQLiteConnection db = new SQLiteConnection(dbPath)) 
+            { 
+            if(db!=null)
+                return true;
+            else
+                return false;
             }
-        }
-
-
-        //gestiamo il multithreading
-        public static DatabaseConnection Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (syncRoot)
-                    {
-                        if (instance == null)
-                            instance = new DatabaseConnection();
-                    }
-                }
-
-                return instance;
-            }
-        }
-
-        public static void Singleton()
-        {
-            var p = DatabaseConnection.Instance;
         }
 
     }

@@ -24,7 +24,8 @@ namespace CrudSample.Views.Anagrafiche.Transporter
     using CrudSample.Business;
     using System.Diagnostics;
     using System.Threading.Tasks;
-    using CrudSample.Views.Anagrafiche.Truck;
+    using CrudSample.Business.Dao;
+
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -34,7 +35,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        Transporter Transporter = null;
+        TransporterExt TransporterExt= null;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -76,11 +77,11 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             /* se l'oggetto è inizializzato è una modifica */
-            Transporter = e.NavigationParameter as Transporter;
+            TransporterExt = e.NavigationParameter as TransporterExt;
 
-            if (Transporter != null)
+            if (TransporterExt != null)
             {
-                this.getValues(Transporter); 
+                this.transporterEditForm.getValues(TransporterExt); 
             }
         }
 
@@ -127,49 +128,20 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private async void Btn_SaveTransporter(object sender, RoutedEventArgs e)
         {
             Transporter transporter = new Transporter();
-            //per fare l'update devo costruire completamente l'oggetto
-            if (Transporter != null) { transporter.Id = Transporter.Id; }
-
-            if (await checkFields(this.transporterForm))
+            this.transporterEditForm.setValues(transporter);
+            if (await transporterEditForm.checkFields()) 
             {
-                this.setValues(transporter);
-                await TransporterService.SaveTransporter(transporter);
-                this.Frame.Navigate(typeof(TransporterListPage));
-            }
-            
-        }
-
-        //set the object values from the inserted values of the Form Fields
-        public void setValues(Transporter t) {
-            
-            t.trId = this.transporterForm.trId;
-            t.trName = this.transporterForm.trName;
-            t.trUrl = this.transporterForm.trUrl;
-            t.trCode = this.transporterForm.trCode;
-        
-        }
-
-        //get the object values and set the Form Fields
-        public void getValues(Transporter t) {
-            this.transporterForm.trId = t.trId;
-            this.transporterForm.trName = t.trName;
-            this.transporterForm.trUrl = t.trUrl;
-            this.transporterForm.trCode= t.trCode;
-        }
-
-        public async Task<bool> checkFields(TransporterFormUC tfUC) {
-            if ((String.IsNullOrEmpty(this.transporterForm.trId))
-                || (String.IsNullOrEmpty(this.transporterForm.trName))
-                || (String.IsNullOrEmpty(this.transporterForm.trCode))
-                || (String.IsNullOrEmpty(this.transporterForm.trUrl)))
-            {
-                await Utility.ShowMessage("compila i dati relativi al transporter");
-                return false;
-            }
                 
-            else
-                return true;
-
+                if (TransporterExt != null)
+                {
+                    transporter.trId = TransporterExt.trId;
+                    await TransporterService.UpdateTransporter(transporter);
+                }
+                else 
+                    await TransporterService.InsertTransporter(transporter);
+                
+                this.Frame.Navigate(typeof(TransporterListPage));  
+            }
         }
 
     }

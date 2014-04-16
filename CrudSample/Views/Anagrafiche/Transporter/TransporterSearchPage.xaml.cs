@@ -23,7 +23,7 @@ namespace CrudSample.Views.Anagrafiche.Transporter
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using CrudSample.Business.Dao;
-    using CrudSample.Views.Anagrafiche.Truck;
+
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -33,9 +33,9 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public ObservableCollection<Transporter> searchList = new ObservableCollection<Transporter>();
+        public ObservableCollection<TransporterExt> searchList = new ObservableCollection<TransporterExt>();
 
-        public static Transporter transporter { get; set; }
+        //public static TransporterExt transporter { get; set; }
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -115,28 +115,12 @@ namespace CrudSample.Views.Anagrafiche.Transporter
 
         private async void Btn_SearchTransporter(object sender, RoutedEventArgs e)
         {
-            transporter = new Transporter();
-
-            //transporter.trId = this.transporterSearch.trId;
-            //transporter.trName = this.transporterSearch.trName;
-            //transporter.trUrl = this.transporterSearch.trUrl;
-            //transporter.trCode = this.transporterSearch.trCode;
-
-            setValues(transporter);
+            TransporterExt transporter = new TransporterExt();
+            
+            transporterSearchForm.setValues(transporter);
 
             searchList = await TransporterService.Search(transporter);
             Frame.Navigate(typeof(TransporterListPage), searchList);
-        }
-
-        //set the object values from the inserted values of the Form Fields
-        public void setValues(Transporter t)
-        {
-
-            t.trId = this.transporterSearch.trId;
-            t.trName = this.transporterSearch.trName;
-            t.trUrl = this.transporterSearch.trUrl;
-            t.trCode = this.transporterSearch.trCode;
-
         }
 
     }

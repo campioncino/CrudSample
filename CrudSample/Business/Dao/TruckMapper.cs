@@ -23,48 +23,16 @@ namespace CrudSample.Business.Dao
     class TruckMapper
     {
         //questa stringa mi servirà per la connessione
-        private static string _dbPath = string.Empty;
+        private static string dbPath = DatabaseConnection.dbPath;
+        
 
-        private static string dbPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_dbPath))
-                {
-                    _dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "myDb.sqlite");
-                }
-
-                return _dbPath;
-            }
-
-        }
-
-        public static async Task<bool> Exists(string id)
-        {
-            Truck truck;
-            truck = await GetTransporterById(id);
-            if (truck != null)
-                return true;
-            else
-                return false;
-
-        }
-
-        public static async Task SaveOrUpdate(Truck truck)
+        public static async Task InsertTruck(Truck truck) 
         {
             using (var db = new SQLiteConnection(dbPath))
             {
-                if (await Exists(truck.truckId))
-                {
-                    await UpdateTruck(truck);
-                   
-                }
+                db.Insert(truck);
 
-
-                else
-                    db.Insert(truck);
             }
-
         }
 
         public static async Task UpdateTruck(Truck truck)
@@ -72,6 +40,7 @@ namespace CrudSample.Business.Dao
             using (var db = new SQLiteConnection(dbPath))
             {
                 db.Update(truck);
+                
             }
         }
 
@@ -79,13 +48,8 @@ namespace CrudSample.Business.Dao
         {
             using (var db = new SQLiteConnection(dbPath))
             {
-                //sempre il tracing
+                
                 db.Trace = true;
-
-                //possiamo usare due diversi modi per cancellare gli oggetti
-                //sempre perchè stiamo usando una libreria progettata da
-                //altri, che in teoria non ci costringe a dover aprire/chiudere
-                //esplicitamente ogni volta il db...operazioni trasparenti
 
                 //Object
                 db.Delete(truck);
@@ -99,51 +63,52 @@ namespace CrudSample.Business.Dao
         /* FUNZIONI DI RICERCA */
 
         //Elenco completo di tutti i Truck presenti
-        public static async Task<ObservableCollection<Truck>> GetAllTrucks()
+        public static async Task<ObservableCollection<TruckExt>> GetAllTruck()
         {
-            List<Truck> trucks;
+            List<TruckExt> list;
             using (var db = new SQLiteConnection(dbPath))
             {
                 // Activate Tracing
                 db.Trace = true;
 
-                trucks = (from p in db.Table<Truck>()
+                list = (from p in db.Table<TruckExt>()
                                 select p).ToList();
 
             }
-            var obsTrucks = new ObservableCollection<Truck>();
-            foreach (var item in trucks)
+            var coll = new ObservableCollection<TruckExt>();
+            foreach (var item in list)
             {
-                obsTrucks.Add(item);
+                coll.Add(item);
             }
-            return obsTrucks;
+            return coll;
         }
 
-        public static async Task<ObservableCollection<Truck>> SearchTruck(Truck Truck)
+        public static async Task<ObservableCollection<TruckExt>> SearchTruck(TruckExt Truck)
         {
-            List<Truck> trucks;
+            List<TruckExt> list;
 
             using (var db = new SQLiteConnection(dbPath))
             {
-                var tmp = from p in db.Table<Truck>() select p;
+                var tmp = from p in db.Table<TruckExt>() select p;
 
-                if(!string.IsNullOrEmpty(Truck.truckId))
-                    tmp = tmp.Where(p => p.truckId.Contains(Truck.truckId));
+                // [crudgen:truck:where]start
 
-                if (!string.IsNullOrEmpty(Truck.Url))
-                    tmp = tmp.Where(p => p.Url.Contains(Truck.Url));
+                if (Truck.truckId != null)
+                    tmp = tmp.Where(p => p.truckId == Truck.truckId);
 
-                if (!string.IsNullOrEmpty(Truck.Vin))
-                    tmp = tmp.Where(p => p.Vin.Contains(Truck.Vin));
+                if (!string.IsNullOrEmpty(Truck.url))
+                    tmp = tmp.Where(p => p.url.Contains(Truck.url));
 
-                if (!string.IsNullOrEmpty(Truck.Code))
-                    tmp = tmp.Where(p => p.Code.Contains(Truck.Code));
+                if (!string.IsNullOrEmpty(Truck.vin))
+                    tmp = tmp.Where(p => p.vin.Contains(Truck.vin));
+
+                if (!string.IsNullOrEmpty(Truck.code))
+                    tmp = tmp.Where(p => p.code.Contains(Truck.code));
+
+                if (Truck.trId!=null)
+                   tmp = tmp.Where(p=>p.trId==Truck.trId);
 
                 // parte della ricerca sui dati Transporter
-
-                if (!string.IsNullOrEmpty(Truck.trId))
-                    tmp = tmp.Where(p => p.trId.Contains(Truck.trId));
-
                 if (!string.IsNullOrEmpty(Truck.trName))
                     tmp = tmp.Where(p => p.trName.Contains(Truck.trName));
 
@@ -153,95 +118,18 @@ namespace CrudSample.Business.Dao
                 if (!string.IsNullOrEmpty(Truck.trCode))
                     tmp = tmp.Where(p => p.trCode.Contains(Truck.trCode));
 
-                trucks = tmp.ToList();
+                // [crudgen:truck:where]start
+
+                list = tmp.ToList();
 
             }
-            var obsTransporters = new ObservableCollection<Truck>();
-            foreach (var item in trucks)
+            var coll = new ObservableCollection<TruckExt>();
+            foreach (var item in list)
             {
-                obsTransporters.Add(item);
+                coll.Add(item);
             }
-            return obsTransporters;
+            return coll;
         }
 
-        // search by Truck.Id
-        public static async Task<Truck> GetTransporterById(string id)
-        {
-            using (var db = new SQLiteConnection(dbPath))
-            {
-                Truck truck = (from p in db.Table<Truck>()
-                                     where p.truckId.Equals(id)
-                                     select p).FirstOrDefault();
-                return truck;
-            }
-
-        }
-
-        //// seach by Truck.Name
-        //public static async Task<ObservableCollection<Truck>> GetTransporterByName(string name)
-        //{
-        //    List<Truck> truck;
-        //    using (var db = new SQLiteConnection(dbPath))
-        //    {
-        //        truck = (from p in db.Table<Truck>()
-        //                 where p.trName.Contains(name)
-        //                 select p).ToList();
-        //    }
-        //    var obsTransporters = new ObservableCollection<Truck>();
-        //    foreach (var item in truck)
-        //    {
-        //        obsTransporters.Add(item);
-        //    }
-        //    return obsTransporters;
-        //}
-
-
-        //// search by Truck.Url  
-        //public static async Task<ObservableCollection<Truck>> GetTransporterByUrl(string url)
-        //{
-        //    List<Truck> truck;
-        //    using (var db = new SQLiteConnection(dbPath))
-        //    {
-        //        truck = (from p in db.Table<Truck>() where p.trUrl.Contains(url) select p).ToList();
-        //    }
-        //    var obsTransporters = new ObservableCollection<Truck>();
-        //    foreach (var item in truck)
-        //    {
-        //        obsTransporters.Add(item);
-        //    }
-        //    return obsTransporters;
-        //}
-
-        //// search by Truck.Code 
-        //public static async Task<ObservableCollection<Truck>> GetTransporterByCode(string code)
-        //{
-        //    List<Truck> truck;
-        //    using (var db = new SQLiteConnection(dbPath))
-        //    {
-        //        truck = (from p in db.Table<Truck>() where p.trCode.Contains(code) select p).ToList();
-        //    }
-        //    var obsTransporters = new ObservableCollection<Truck>();
-        //    foreach (var item in truck)
-        //    {
-        //        obsTransporters.Add(item);
-        //    }
-        //    return obsTransporters;
-        //}
-
-        ///* DEBUG FUNCTIONS */
-
-        ////ci ritorna l'id cercato...funzione usata per qlc debug..mi sa che se po levà
-        //public static async Task<Int32> GetTransporterId(int truckId)
-        //{
-        //    using (var db = new SQLiteConnection(dbPath))
-        //    {
-        //        Truck truck = (from p in db.Table<Truck>()
-        //                             where p.trId == Convert.ToString(truckId)
-        //                             select p).FirstOrDefault();
-
-        //        return truck.Id;
-        //    }
-
-        //}
     }
 }

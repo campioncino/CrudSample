@@ -5,7 +5,7 @@
     xmlns:local="using:CrudSample.Views.Anagrafiche.Truck"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" >
+    mc:Ignorable="d">
 <!--d:DesignHeight="300"
     d:DesignWidth="400">-->
  
@@ -16,7 +16,7 @@
                 
                 <TextBlock Text="Truck" FontWeight="Bold" Width="150" FontSize="24" HorizontalAlignment="Left" />
                 
-                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0" Visibility="Collapsed">
                         <TextBlock x:Name="TruckId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
                         <TextBox x:Name="_truckId" InputScope="Formula" Text="{Binding truckId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			        Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
@@ -24,19 +24,19 @@
                 
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <TextBlock x:Name="TruckVin" Text="Vin" FontWeight="Bold" Width="150" FontSize="24"/>
-                        <TextBox x:Name="_Vin" Text="{Binding Vin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox x:Name="_Vin" Text="{Binding vin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			    Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                     </StackPanel>
                 
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <TextBlock x:Name="TruckCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
-                        <TextBox x:Name="_Code" Text="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox x:Name="_Code" Text="{Binding code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			    Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                     </StackPanel>
                 
                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <TextBlock x:Name="TruckUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
-                        <TextBox x:Name="_Url" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox x:Name="_Url" Text="{Binding url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			    Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                     </StackPanel>
                 
@@ -45,21 +45,6 @@
                 <!-- dati del transporter-->
                 <StackPanel Margin="0,20,0,20" Orientation="Horizontal">
                     <TextBlock Text="Transporter" FontWeight="Bold" Width="150" FontSize="24"  HorizontalAlignment="Left" />
-                    <!--<Button 
-                        Margin="20,0,20,0"
-                        Height="100"
-                        Width="300"
-                	    Visibility="{Binding ButtonVisibility}" 
-                	    x:Name="button"
-                        Click="Button_Click"
-                        HorizontalAlignment="Right">
-                        
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="../../../Assets/transporter-512.png"/>
-                            <TextBlock Text="Associate Transporter" />
-                        </StackPanel>
-                        
-                    </Button>-->
 
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
@@ -68,19 +53,20 @@
                     <TextBox x:Name="_trName" IsReadOnly="True" Text="{Binding trName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"
                              Visibility="Collapsed"/>
-                    <SearchBox PlaceholderText="{Binding placeholder}" 
+                    <SearchBox PlaceholderText="{Binding placeholder,Mode=TwoWay}" 
                        Width="300"
                        Margin="20,0,20,0"                   
                        SearchHistoryEnabled="False"
                        FocusOnKeyboardInput="False"
                        ChooseSuggestionOnEnter="True"
                        SuggestionsRequested="SearchBoxSuggestions"
-                       QuerySubmitted="SearchBoxQuery"
+                       ResultSuggestionChosen="SuggestionChoosen"
+                       QueryChanged="SearchQueryChanged"
                        HorizontalAlignment="Left"
                        x:Name="searchBox"
                     />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" Visibility="Collapsed">
                     <TextBlock x:Name="TransId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
                     <TextBox x:Name="_trId" InputScope="Formula" IsReadOnly="True" Text="{Binding trId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
         			Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>

@@ -16,19 +16,9 @@ namespace CrudSample.Business
     public class TransporterService
     {
 
-        public static void createDb()
+        public static async Task InsertTransporter(Transporter trans)
         {
-            TransporterMapper.CreateDatabase();
-        }
-
-        public async static Task<bool> Exist(string transId)
-        {
-            bool exist = await TransporterMapper.Exisits(transId);
-            return exist;
-        }
-        public static async Task SaveTransporter(Transporter trans)
-        {
-            await TransporterMapper.SaveOrUpdate(trans);
+            await TransporterMapper.InsertTransporter(trans);
         }
 
         public static async Task UpdateTransporter(Transporter trans)
@@ -41,80 +31,27 @@ namespace CrudSample.Business
             await TransporterMapper.DeleteTransporter(trans);
         }
 
-        /* SEARCH FUNCTIONS */ 
+        /* SEARCH FUNCTIONS */
 
-        public static async Task<ObservableCollection<Transporter>> GetAll()
+        public static async Task<ObservableCollection<TransporterExt>> GetAll()
         {
-            var list = new ObservableCollection<Transporter>();
+            var list = new ObservableCollection<TransporterExt>();
             list = await TransporterMapper.GetAllTransporters();
             return list;
         }
 
-        public static async Task<ObservableCollection<Transporter>> Search(Transporter transporter)
+        public static async Task<ObservableCollection<TransporterExt>> Search(TransporterExt transporter)
         {
-            ObservableCollection<Transporter> transList = new ObservableCollection<Transporter>();
-            transList = await TransporterMapper.SearchTransporter(transporter);
-            return transList;
+            ObservableCollection<TransporterExt> list = new ObservableCollection<TransporterExt>();
+            list = await TransporterMapper.SearchTransporter(transporter);
+            return list;
         }
 
-
-        public async static Task<bool> isEmpty() {
-            ObservableCollection<Transporter> t = await GetAll();
-            bool empty = true;
-            if (t.Count > 0)
-                empty = false;
-            return empty;
-        }
-
-        public static async Task<Int32> GetId(int transId)
+        public static async Task<ObservableCollection<TransporterExt>> Search_StartsWith(TransporterExt transporter)
         {
-            Int32 tableId;
-            tableId = await TransporterMapper.GetTransporterId(transId);
-            return tableId;
-        }
-        public static async Task<int> getId(string id)
-        {
-
-            Transporter t = await TransporterMapper.GetTransporterById(id);
-            return t.Id;
-        }
-
-        public static async Task<ObservableCollection<Transporter>> Search(string id, string name, string url, string code)
-        {
-
-            Transporter trans = new Transporter();
-            ObservableCollection<Transporter> transList = new ObservableCollection<Transporter>();
-
-            if (id != null)
-            {
-                trans = await TransporterMapper.GetTransporterById(id);
-                transList.Add(trans);
-            }
-
-            else if ((!string.IsNullOrEmpty(name)) || (!string.IsNullOrEmpty(url)) || (!string.IsNullOrEmpty(code)))
-            {
-                if (!string.IsNullOrEmpty(name))
-                {
-                    transList = await TransporterMapper.GetTransporterByName(name);
-                }
-                else if (!string.IsNullOrEmpty(url))
-                {
-                    transList = await TransporterMapper.GetTransporterByUrl(url);
-                }
-                else if (!string.IsNullOrEmpty(code))
-                {
-                    transList = await TransporterMapper.GetTransporterByCode(code);
-                }
-
-            }
-
-            else if ((string.IsNullOrEmpty(name)) && (string.IsNullOrEmpty(id)) && (string.IsNullOrEmpty(url)) && (string.IsNullOrEmpty(code)))
-            {
-                transList = await TransporterMapper.GetAllTransporters();
-            }
-
-            return transList;
-
+            ObservableCollection<TransporterExt> list = new ObservableCollection<TransporterExt>();
+            list = await TransporterMapper.SearchTransporter_StartsWith(transporter);
+            return list;
         }
     }
 }

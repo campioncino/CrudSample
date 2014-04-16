@@ -36,7 +36,7 @@ namespace CrudSample.Views.Menu
 
         private async void GoToTransporterMenu(object sender, RoutedEventArgs e)
         {
-            //OutputText.Text = string.Format("Hello {0}", NameInput.Text);
+            
             ((Frame)(Window.Current.Content)).Navigate(typeof(TransporterListPage));           
         }
 

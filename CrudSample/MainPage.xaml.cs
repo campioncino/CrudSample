@@ -21,12 +21,19 @@ using CrudSample.Business.Dao;
 using CrudSample.Views.Anagrafiche.Transporter;
 using CrudSample.Views.Anagrafiche.Truck;
 using CrudSample.Views;
+using Windows.Storage;
+using System.Diagnostics;
+using Windows.Storage.Pickers;
+using System.Text;
+using System.Threading.Tasks;
+using CrudSample.Views.Menu;
 
 namespace CrudSample
 {
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
+    /// 
     public sealed partial class MainPage : Page
     {
 
@@ -72,19 +79,7 @@ namespace CrudSample
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            try
-            {
-                
-                DatabaseConnection.Singleton();
-                
-
-            }
-            catch (Exception)
-            {
-                var msgDlg = new Windows.UI.Popups.MessageDialog("Impossibile creare Database");
-                msgDlg.DefaultCommandIndex = 1;
-                msgDlg.ShowAsync();
-            }
+            
         }
 
         /// <summary>
@@ -124,19 +119,12 @@ namespace CrudSample
 
         public void Btn_ListTruck(object sender, RoutedEventArgs e)
         {
-
-            //spostiamoci sulla nuova pagina
             this.Frame.Navigate(typeof(TruckListPage));
-            
-
         }
 
         public void Btn_ListTransporter(object sender, RoutedEventArgs e)
         {
-
-            //spostiamoci sulla nuova pagina
             this.Frame.Navigate(typeof(TransporterListPage));
-
         }
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
@@ -150,7 +138,7 @@ namespace CrudSample
         }
         private void Btn_Refresh(object sender, RoutedEventArgs e)
         {
-
+            this.Frame.Navigate(typeof(GlobalPage));
         }
     }
 }

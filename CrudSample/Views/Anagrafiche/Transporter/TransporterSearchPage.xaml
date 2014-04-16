@@ -54,7 +54,7 @@
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
         <StackPanel Grid.Row="1" Margin="120,30,40,0">
-            <UC:TransporterFormUC x:Name="transporterSearch" />
+            <UC:TransporterFormUC x:Name="transporterSearchForm" />
         </StackPanel>
         
     </Grid>

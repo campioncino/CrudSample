@@ -17,7 +17,7 @@
                     Width="250"
                     Height="80">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="../../../Assets/truck-512.png" Stretch="Uniform" />
+                    <Image Source="ms-appx:///Assets/truck-512.png" Stretch="Uniform" />
                     <TextBlock Text="Truck&#x0a; Menu" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="25,0,0,0"/>
                 </StackPanel>
             </Button>
@@ -27,7 +27,7 @@
                     Width="250"
                     Height="80">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="../../Assets/transporter-512.png" Stretch="Uniform"/>
+                    <Image Source="ms-appx:///Assets/transporter-512.png" Stretch="Uniform"/>
                     <TextBlock Text="Transporter&#x0a; Menu" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,0,0,0"/>
                 </StackPanel>
             </Button>

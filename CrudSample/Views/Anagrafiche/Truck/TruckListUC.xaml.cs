@@ -22,6 +22,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
         public TruckListUC()
         {
             this.InitializeComponent();
+            this.DataContext = this;
         }
 
 
@@ -29,7 +30,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
         public event EventHandler<EventArgs> SelectionChangedEvent;
 
 
-        private void truckList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void truckList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectionChangedEvent(sender, new EventArgs());
         }
@@ -39,8 +40,8 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         public ListBox getList
         {
-            get { return truckList; }
-            set { truckList = value; }
+            get { return truckListUC; }
+            set { truckListUC = value; }
         }
     }
 }

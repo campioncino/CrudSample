@@ -1,10 +1,17 @@
-﻿using System;
+﻿using CrudSample.Business;
+using CrudSample.Business.Model;
+using CrudSample.Common;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -17,14 +24,21 @@ using Windows.UI.Xaml.Navigation;
 
 namespace CrudSample.Views.Anagrafiche.Truck
 {
+    using CrudSample.Business.Model;
     public sealed partial class TruckFormUC : UserControl
     {
         public TruckFormUC()
         {
             this.InitializeComponent();
             this.DataContext = this;
+           
         }
 
+        public static IRandomAccessStreamReference imgRef = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/transporter-512.png"));
+
+        public ObservableCollection<TransporterExt> suggested = new ObservableCollection<TransporterExt>();
+
+        
         // Truck's values
         public String truckId
         {
@@ -39,38 +53,38 @@ namespace CrudSample.Views.Anagrafiche.Truck
                    new PropertyMetadata(""));
 
 
-        public String Code
+        public String code
         {
             get { return (String)GetValue(EditTruckCodeTextProperty); }
             set { SetValue(EditTruckCodeTextProperty, value); }
         }
 
         public static readonly DependencyProperty EditTruckCodeTextProperty =
-               DependencyProperty.Register("Code",
+               DependencyProperty.Register("code",
                    typeof(String),
                    typeof(TruckFormUC),
                    new PropertyMetadata(""));
 
-        public String Vin
+        public String vin
         {
             get { return (String)GetValue(EditTruckVinTextProperty); }
             set { SetValue(EditTruckVinTextProperty, value); }
         }
 
         public static readonly DependencyProperty EditTruckVinTextProperty =
-               DependencyProperty.Register("Vin",
+               DependencyProperty.Register("vin",
                    typeof(String),
                    typeof(TruckFormUC),
                    new PropertyMetadata(""));
 
-        public String Url
+        public String url
         {
             get { return (String)GetValue(EditTruckUrlTextProperty); }
             set { SetValue(EditTruckUrlTextProperty, value); }
         }
 
         public static readonly DependencyProperty EditTruckUrlTextProperty =
-               DependencyProperty.Register("Url",
+               DependencyProperty.Register("url",
                    typeof(String),
                    typeof(TruckFormUC),
                    new PropertyMetadata(""));
@@ -128,28 +142,28 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         /* Gestione click sul bottone */
 
-        public delegate void ValueChangedEventHandler(object sender, EventArgs e);
+        //public delegate void ValueChangedEventHandler(object sender, EventArgs e);
 
-        public event ValueChangedEventHandler Button_Clicked;
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (Button_Clicked != null)
-            {
-                Button_Clicked(this, EventArgs.Empty);
-            }
-        }
+        //public event ValueChangedEventHandler Button_Clicked;
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (Button_Clicked != null)
+        //    {
+        //        Button_Clicked(this, EventArgs.Empty);
+        //    }
+        //}
 
-        public Visibility ButtonVisibility
-        {
-            get { return (Visibility)GetValue(ButtonVisibilityProperty); }
-            set { SetValue(ButtonVisibilityProperty, value); }
-        }
+        //public Visibility ButtonVisibility
+        //{
+        //    get { return (Visibility)GetValue(ButtonVisibilityProperty); }
+        //    set { SetValue(ButtonVisibilityProperty, value); }
+        //}
 
-        public static DependencyProperty ButtonVisibilityProperty = 
-            DependencyProperty.Register("ButtonVisibility", 
-                typeof(Visibility), 
-                typeof(TruckFormUC),
-                null);
+        //public static DependencyProperty ButtonVisibilityProperty = 
+        //    DependencyProperty.Register("ButtonVisibility", 
+        //        typeof(Visibility), 
+        //        typeof(TruckFormUC),
+        //        null);
 
        
 
@@ -168,28 +182,6 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
 
         /* Gestione SearchBox */
-        
-
-        public delegate void SuggestionsRequested(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args);
-
-        public event Windows.Foundation.TypedEventHandler<Windows.UI.Xaml.Controls.SearchBox, SearchBoxSuggestionsRequestedEventArgs> SearchBoxSuggestionsRequested;
-
-        private void SearchBoxSuggestions(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args)
-        {
-            if (SearchBoxSuggestionsRequested != null)
-                SearchBoxSuggestionsRequested(sender, args);
-        }
-
-
-        public delegate void QuerySubmitted(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxQuerySubmittedEventArgs args);
-
-        public event Windows.Foundation.TypedEventHandler<Windows.UI.Xaml.Controls.SearchBox, SearchBoxQuerySubmittedEventArgs> SearchBoxQuerySubmitted;
-        private void SearchBoxQuery(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
-        {
-            if (SearchBoxQuerySubmitted != null)
-                SearchBoxQuerySubmitted(sender, args);
-        }
-
 
         public String placeholder
         {
@@ -202,7 +194,174 @@ namespace CrudSample.Views.Anagrafiche.Truck
                    typeof(String),
                    typeof(TruckFormUC),
                    new PropertyMetadata(""));
+
+        public async void SearchBoxSuggestions(SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args) {
+            var deferral = args.Request.GetDeferral();
+            try
+            {
+            
+            TransporterExt tr_search = new TransporterExt();
+            ObservableCollection<TransporterExt> querySuggestions = new ObservableCollection<TransporterExt>();
+            var queryText = args.QueryText != null ? args.QueryText.Trim() : null;
+
+
+            if (string.IsNullOrEmpty(queryText)) return;
+
+            suggested.Clear();
+            tr_search.name = queryText;
+            
+
+                var suggestionCollection = args.Request.SearchSuggestionCollection;
+
+
+                querySuggestions = await TransporterService.Search_StartsWith(tr_search);
+
+
+                if (querySuggestions != null && querySuggestions.Count > 0)
+                
+                {
+
+                    int i = 0;
+                    foreach (TransporterExt tr in querySuggestions)
+                    {
+                        string name = tr.name;
+                        string detail = tr.trId.ToString();
+                        string tag = i.ToString();
+                        string imageAlternate = "imgDesc";
+
+                        suggestionCollection.AppendResultSuggestion(name, detail, tag, imgRef, imageAlternate);
+                        
+                        this.suggested.Add(tr);
+
+                        i++;
+                   }
+
+                }
+            }
+            catch (System.ArgumentException exc)
+            {
+                //Ignore any exceptions that occur trying to find search suggestions.
+                Debug.WriteLine(exc.Message);
+                Debug.WriteLine(exc.StackTrace);
+            }
+            
+            deferral.Complete();
+        }
+
+       
+        private void SuggestionChoosen(SearchBox sender, SearchBoxResultSuggestionChosenEventArgs args)
+        {
+
+            int p = Convert.ToInt32(args.Tag);
+            TransporterExt t = new TransporterExt();
+            t = suggested[p];
+            getTransporterValues(t);
+        }
+
+
+        private void SearchQueryChanged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
+        {
+            TransporterExt t = new TransporterExt();
+            getTransporterValues(t);
+
+        }
+
+
+        //public delegate void QueryChanged(SearchBox sender, SearchBoxQueryChangedEventArgs args);
+
+        //public event TypedEventHandler<SearchBox, SearchBoxQueryChangedEventArgs> SearchBoxQueryChanged;
+        //public void SearchQueryChanged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
+        //{
+        //    if (SearchBoxQueryChanged != null)
+        //        SearchBoxQueryChanged(sender, args);
+
+        //}
+
+        //public delegate void SuggestionsRequested(SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args);
+
+        //public event TypedEventHandler<SearchBox, SearchBoxSuggestionsRequestedEventArgs> SearchBoxSuggestionsRequested;
+
+        //public void SearchBoxSuggestions(SearchBox sender, SearchBoxSuggestionsRequestedEventArgs args)
+        //{
+
+        //    if (SearchBoxSuggestionsRequested != null)
+        //        SearchBoxSuggestionsRequested(sender, args);
+        //}
+
+
+        //public delegate void ResultSuggestionChosen(SearchBox sender, SearchBoxResultSuggestionChosenEventArgs args);
+
+        //public event TypedEventHandler<SearchBox, SearchBoxResultSuggestionChosenEventArgs> SearchBoxSuggestionChoosen;
+        //public void SuggestionChoosen(SearchBox sender, SearchBoxResultSuggestionChosenEventArgs args)
+        //{
+        //    if (SearchBoxSuggestionChoosen != null)
+        //        SearchBoxSuggestionChoosen(sender, args);
+        //}
+
+        //public delegate void QuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args);
+
+        //public event TypedEventHandler<SearchBox, SearchBoxQuerySubmittedEventArgs> SearchBoxQuerySubmitted;
+        //public void SearchBoxQuery(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        //{
+        //    if (SearchBoxQuerySubmitted != null)
+        //        SearchBoxQuerySubmitted(sender, args);
+        //}
+
         /* Fine Gestione SearchBox */
+
+        /* funzioni di utilità */
+        public void getTransporterValues(TransporterExt t)
+        {
+
+            trId = t.trId.ToString();
+            trName= t.name;
+            trUrl = t.url;
+            trCode = t.code;
+
+        }
+
+        public void getTruckExt(TruckExt t) 
+        {
+            truckId = t.truckId.ToString();
+            url = t.url;
+            vin = t.vin;
+            code = t.code;
+            trId = t.trId.ToString();
+            trName = t.trName;
+            trCode = t.trCode;
+            trUrl = t.trUrl;
+        }
+
+        public void setValues(Truck t) 
+        {
+
+            if (!string.IsNullOrEmpty(truckId))
+                t.truckId = Convert.ToInt32(truckId);
+            t.code = code;
+            t.vin = vin;
+            t.url = url;
+
+            //dati opzionali
+            if (!string.IsNullOrEmpty(trId))
+                t.trId = Convert.ToInt32(trId);  
+            
+        }
+
+        //controllo che i dati necessari al salvataggio del Truck ci siano tutti
+        public async Task<bool> checkFields()
+        {
+            if ((String.IsNullOrEmpty(vin))
+                || (String.IsNullOrEmpty(code))
+                || (String.IsNullOrEmpty(url)))
+            {
+                await Utility.ShowMessage("compila tutti i dati relativi al Truck");
+                return false;
+            }
+
+            else
+                return true;
+
+        }
         
     }
 }

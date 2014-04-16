@@ -25,6 +25,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
     using System.Collections.ObjectModel;
 
     using CrudSample.Views.Anagrafiche.Transporter;
+    using System.Diagnostics;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -34,11 +35,11 @@ namespace CrudSample.Views.Anagrafiche.Truck
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public ObservableCollection<Truck> Trucks { get; set; }
+        public ObservableCollection<TruckExt> list { get; set; }
 
-        public ObservableCollection<Truck> seachResult = null;
+        public ObservableCollection<TruckExt> searchResult = null;
 
-        public Truck truck { get; set; }
+        public TruckExt truckExt { get; set; }
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -79,17 +80,17 @@ namespace CrudSample.Views.Anagrafiche.Truck
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            seachResult = e.NavigationParameter as ObservableCollection<Truck>;
-            if (seachResult != null)
+            searchResult = e.NavigationParameter as ObservableCollection<TruckExt>;
+            if (searchResult != null)
             {
-                Trucks = seachResult;
+                list = searchResult;
             }
             else
             {
-                Trucks = await TruckService.GetAll();
+                list = await TruckService.GetAll();  
             }
+            truckList.getList.ItemsSource = list;
             
-            truckList.getList.ItemsSource = Trucks;
         }
 
         /// <summary>
@@ -107,10 +108,10 @@ namespace CrudSample.Views.Anagrafiche.Truck
         public async void truckList_SelectionChangedEvent(object sender, EventArgs e)
         {
             
-            truck = (Truck)truckList.getList.SelectedItem;
+            truckExt = (TruckExt)truckList.getList.SelectedItem;
 
             //ci spostiamo sulla pagina dettaglio
-            Frame.Navigate(typeof(TruckCrudPage), truck);
+            Frame.Navigate(typeof(TruckCrudPage), truckExt);
 
         }
 
@@ -126,7 +127,7 @@ namespace CrudSample.Views.Anagrafiche.Truck
 
         private async void Btn_RefreshTruck(object sender, RoutedEventArgs e)
         {
-            Trucks = await TruckService.GetAll();
+            list = await TruckService.GetAll();
             this.Frame.Navigate(this.GetType());
         }
 

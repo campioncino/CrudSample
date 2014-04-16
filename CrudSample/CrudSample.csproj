@@ -67,6 +67,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -103,6 +104,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Page Include="Views\Menu\GlobalPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,9 +164,10 @@
     <Compile Include="Business\Dao\DatabaseConnection.cs" />
     <Compile Include="Business\Dao\TransporterMapper.cs" />
     <Compile Include="Business\Dao\TruckMapper.cs" />
-    <Compile Include="Business\Model\Entity.cs" />
     <Compile Include="Business\Model\Transporter.cs" />
+    <Compile Include="Business\Model\TransporterExt.cs" />
     <Compile Include="Business\Model\Truck.cs" />
+    <Compile Include="Business\Model\TruckExt.cs" />
     <Compile Include="Business\TranspoterService.cs" />
     <Compile Include="Business\TruckService.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
@@ -169,6 +175,9 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Common\Utility.cs" />
+    <Compile Include="Views\Menu\GlobalPage.xaml.cs">
+      <DependentUpon>GlobalPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -213,6 +222,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Assets\test.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="CrudSample_TemporaryKey.pfx" />
     <None Include="packages.config" />
   </ItemGroup>

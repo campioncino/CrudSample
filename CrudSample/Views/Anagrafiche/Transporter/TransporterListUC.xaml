@@ -18,11 +18,11 @@
                             <TextBlock x:Name="TransId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
                             <TextBlock Text="{Binding trId}"  FontSize="22" Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                             <TextBlock Margin="40,0,0,0" Text="TransName" FontWeight="Bold" Width="150" FontSize="24"/>
-                            <TextBlock Text="{Binding trName}" FontSize="22" Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding name}" FontSize="22" Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <TextBlock Text="TransUrl"  Width="150" FontWeight="Bold" FontSize="24"/>
-                            <TextBlock Text="{Binding trUrl}" FontSize="22" Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding url}" FontSize="22" Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

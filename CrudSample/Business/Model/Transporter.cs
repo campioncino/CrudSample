@@ -4,13 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SQLite;
+
 namespace CrudSample.Business.Model
 {
-    public class Transporter : Entity
+    [Table("TRANSPORTER")]
+    public class Transporter
     {
-        public String trId { get; set; }
-        public String trName { get; set; }
-        public String trCode { get; set; }
-        public String trUrl { get; set; }
+        [PrimaryKey, AutoIncrement]
+        [Column("TR_ID")]
+        public int? trId { get; set; }
+
+        [Column("CODE")]
+        public String code { get; set; }
+
+        [Column("NAME")]
+        public String name { get; set; }
+
+        [Column("URL")]
+        public String url { get; set; }
     }
 }

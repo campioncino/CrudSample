@@ -25,6 +25,8 @@ namespace CrudSample.Views.Anagrafiche.Truck
     using System.Threading.Tasks;
     using System.Collections.ObjectModel;
     using Windows.Storage.Streams;
+    using CrudSample.Business.Dao;
+    using System.Text.RegularExpressions;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -34,14 +36,9 @@ namespace CrudSample.Views.Anagrafiche.Truck
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public static Truck Truck;
+        public TruckExt TruckExt;
 
-        public static int Id;
-        //public static Truck tmp;
-        public Transporter Transporter = null;
-        public string selection = null;
         
-        public static int item;
         /// <summary>
         /// This can be changed to a strongly typed view model.
         /// </summary>
@@ -81,44 +78,27 @@ namespace CrudSample.Views.Anagrafiche.Truck
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            /* se l'oggetto è inizializzato è una modifica */
+            
 
-            //Transporter = e.NavigationParameter as Transporter;
+            this.truckEditForm.placeholder = "Inserisci nome Transporter";
 
-            this.truckForm.placeholder = "Inserisci nome Transporter";
+            TruckExt = e.NavigationParameter as TruckExt;
 
-            //if (Transporter == null)
-            //{
-            //    Truck = e.NavigationParameter as Truck;
-                
-            //    Debug.WriteLine("transporter == null");
-            //}
-
-            Truck = e.NavigationParameter as Truck;
-
-            if (Truck != null)
+            if (TruckExt != null)
             {
-                this.getValues(Truck);
-                Id = Truck.Id;
-               
+                //this.getValues(TruckExt);
+                truckEditForm.getTruckExt(TruckExt);
                 //ovvero c'è anche un transporter associato
-                if (!string.IsNullOrEmpty(Truck.trName))
+                if (!string.IsNullOrEmpty(TruckExt.trName))
                 {
-                    this.truckForm.placeholder = Truck.trName;
-                }
-                
-                
-            }
+                    this.truckEditForm.placeholder = TruckExt.trName;
 
-            //if (Transporter != null && Truck != null)
-            //{
-            //    this.getTransporterValues(Transporter);
-            //    this.getTruckValues(Truck);
-            //    this.truckForm.placeholder = Transporter.trName;
-            //    Debug.WriteLine("Transporter!=null && Truck=! null");
-            //}
-          
+                }
+                   
+            }
+            
         }
+
 
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the
@@ -151,189 +131,37 @@ namespace CrudSample.Views.Anagrafiche.Truck
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+              
             navigationHelper.OnNavigatedFrom(e);
+
         }
 
         #endregion
 
         private async void Btn_SaveTruck(object sender, RoutedEventArgs e)
         {
+            Truck truck = new Truck();
+            this.truckEditForm.setValues(truck);
             
-            //per fare l'update devo costruire completamente l'oggetto
-
-
-            bool check = await checkFields(this.truckForm);
-            if (check)
+            if (await truckEditForm.checkFields())
             {
-                Truck = new Truck();
-                Truck.Id = Id;
 
-                setValues(Truck);
-                await TruckService.SaveTruck(Truck);
-                Truck = null;
+                if (TruckExt != null)
+                {
+                    truck.truckId = TruckExt.truckId;
+                    await TruckService.UpdateTruck(truck);
+                }
+                else
+                    await TruckService.InsertTruck(truck);
+
                 this.Frame.Navigate(typeof(TruckListPage));
             }
-        }
-
-        //private async void Select_Transporter(object sender, EventArgs e)
-        //{
-        //    Debug.WriteLine("is it called?");
-        //    selection = "fromCrudPage";
-        //    bool check = await checkFields(this.truckForm);
-        //    bool empty = await TransporterService.isEmpty();
-        //    Truck = new Truck();
-        //    setValues(Truck);
-        //    Truck.Id = Id;
-        //    if (empty) 
-        //    {
-        //        await Utility.ShowMessage("non ci sono Transporter nel DB");
-        //    }
-        //    if (check && (!empty))
-        //    {
-        //        Frame.Navigate(typeof(TransporterListPage), selection);
-        //    }
-        
-        //}
-
-        public async void OnSuggest(Windows.UI.Xaml.Controls.SearchBox e, SearchBoxSuggestionsRequestedEventArgs args)
-        {
-            var queryText = args.QueryText != null ? args.QueryText.Trim() : null;
-            
-            if (string.IsNullOrEmpty(queryText)) return;
-            var deferral = args.Request.GetDeferral();
-
-            Transporter tr_search = new Transporter();
-            tr_search.trName = queryText;
-            int count = 0;
-
-            try
-            {
-                var suggestionCollection = args.Request.SearchSuggestionCollection;
-                
-
-                ObservableCollection<Transporter> querySuggestions = await TransporterService.Search(tr_search);
-
-
-                if (querySuggestions != null && querySuggestions.Count > 0)
-                {
-                    count = querySuggestions.Count;
-                    for (int i = 0; i <= count; i++)
-                    {
-                        string query = "[" + querySuggestions[i].trId + "] " + querySuggestions[i].trName;
-                        //suggestionCollection.AppendQuerySuggestion(querySuggestions[i].trName);
-                        suggestionCollection.AppendQuerySuggestion(query);
-                    }
-                }
-
-            }
-            catch (Exception)
-            {
-                //Ignore any exceptions that occur trying to find search suggestions.
-                Debug.WriteLine("Exception rilevate nella searchBox");
-            }
-
-            deferral.Complete();
-        }
-
-        private void SearchBox_QueryChanged(SearchBox sender, SearchBoxQueryChangedEventArgs args)
-        {
-            Debug.WriteLine("che fai?");
-        }
-
-        private async void SearchBox_QuerySubmitted(Windows.UI.Xaml.Controls.SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
-        {
-            string queryText = args.QueryText;
-            Transporter tr_query = new Transporter();
-            tr_query.trId = Utility.getBetween(queryText, "[", "]");
-            //tr_query.trName = queryText;
-            ObservableCollection<Transporter> result = await TransporterService.Search(tr_query);
-            if(result!=null)
-            getTransporterValues(result[0]);
-
-            
-
-        }
-
-
-        //get the partial-object values and set the FORM
-        public void getTransporterValues(Transporter t)
-        {
-
-            //dati provenienti dal transporter selezionato 
-
-            this.truckForm.trId = t.trId;
-            this.truckForm.trName = t.trName;
-            this.truckForm.trUrl =  t.trUrl;
-            this.truckForm.trCode = t.trCode;
-
-        }
-
-        //get the partial-object values and set the FORM
-        public void getTruckValues(Truck t)
-        {
-            // prelevo i dati strettamente necessari al truck
-            this.truckForm.truckId = t.truckId;
-            this.truckForm.Code = t.Code;
-            this.truckForm.Vin = t.Vin;
-            this.truckForm.Url = t.Url;
-
-        }
-
-
-        //Get objet values to initialize the FORM
-        public void getValues(Truck t) 
-        {
-            // prelevo i dati strettamente necessari al truck
-            this.truckForm.truckId = t.truckId;
-            this.truckForm.Code = t.Code;
-            this.truckForm.Vin = t.Vin;
-            this.truckForm.Url = t.Url;
-            this.truckForm.trId = t.trId;
-            this.truckForm.trName = t.trName;
-            this.truckForm.trUrl = t.trUrl;
-            this.truckForm.trCode = t.trCode;
-            
-  
-        }
-
-
-        //Set objet values from the fields of the FORM
-        public void setValues(Truck t)
-        {
-            
-            //dati necessari
-            t.truckId = this.truckForm.truckId;
-            t.Code = this.truckForm.Code;
-            t.Vin = this.truckForm.Vin;
-            t.Url = this.truckForm.Url;
-
-            //dati opzionali
-            t.trId = this.truckForm.trId;
-            t.trName = this.truckForm.trName;
-            t.trUrl = this.truckForm.trUrl;
-            t.trCode = this.truckForm.trCode;
-            
-            
-        }
-
-        public async Task<bool> checkFields(TruckFormUC tfUC)
-        {
-            if ((String.IsNullOrEmpty(this.truckForm.truckId))
-                || (String.IsNullOrEmpty(this.truckForm.Vin))
-                || (String.IsNullOrEmpty(this.truckForm.Code))
-                || (String.IsNullOrEmpty(this.truckForm.Url)))
-            {
-                await Utility.ShowMessage("compila tutti i dati relativi al Truck");
-                return false;
-            }
-
-            else
-                return true;
-
+           
         }
 
     }

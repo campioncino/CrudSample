@@ -30,66 +30,15 @@ namespace CrudSample.Business.Dao
     
     {
         //questa stringa mi servirà per la connessione
-        private static string _dbPath = string.Empty;
+        private static string dbPath = DatabaseConnection.dbPath;
 
-        private static string dbPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_dbPath))
-                {
-                    _dbPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, "myDb.sqlite");
-                }
 
-                return _dbPath;
-            }
-
-        }
-
-        public static void CreateDatabase()
-        {
-            //creiamo una connessione
-            using (SQLiteConnection db = new SQLiteConnection(dbPath))
-            {
-                //utile per il debug, il trace
-                db.Trace = true;
-
-                //creiamo una tabella, se non esiste
-                db.CreateTable<Transporter>();
-            }
-        }
-
-        public static void StartUpDb()
-        {
-            //await Task.Run(() => CreateDatabase());
-            CreateDatabase();
-
-        }
-
-        public static async Task<bool> Exisits(string id)
-        {
-            Transporter tr;
-            tr = await GetTransporterById(id);
-            if (tr != null)
-                return true;
-            else
-                return false;
-
-        }
-
-        public static async Task SaveOrUpdate(Transporter trans)
+        public static async Task InsertTransporter(Transporter trans)
         {
             using (var db = new SQLiteConnection(dbPath))
             {
-                if (await Exisits(trans.trId)){
-                    db.Update(trans);
-                }
-                   
-
-                else
-                    db.Insert(trans);
+                db.Insert(trans);
             }
-
         }
 
         public static async Task UpdateTransporter(Transporter trans)
@@ -107,11 +56,6 @@ namespace CrudSample.Business.Dao
                 //sempre il tracing
                 db.Trace = true;
 
-                //possiamo usare due diversi modi per cancellare gli oggetti
-                //sempre perchè stiamo usando una libreria progettata da
-                //altri, che in teoria non ci costringe a dover aprire/chiudere
-                //esplicitamente ogni volta il db...operazioni trasparenti
-
                 //Object
                 db.Delete(trans);
 
@@ -124,138 +68,91 @@ namespace CrudSample.Business.Dao
         /* FUNZIONI DI RICERCA */
 
         //Elenco completo di tutti i Transporter presenti
-        public static async Task<ObservableCollection<Transporter>> GetAllTransporters()
+        public static async Task<ObservableCollection<TransporterExt>> GetAllTransporters()
         {
-            List<Transporter> transporters;
+            List<TransporterExt> list;
             using (var db = new SQLiteConnection(dbPath))
             {
                 // Activate Tracing
                 db.Trace = true;
 
-                transporters = (from p in db.Table<Transporter>()
+                list = (from p in db.Table<TransporterExt>()
                                 select p).ToList();
 
             }
-            var obsTransporters = new ObservableCollection<Transporter>();
-            foreach (var item in transporters)
+            var coll = new ObservableCollection<TransporterExt>();
+            foreach (var item in list)
             {
-                obsTransporters.Add(item);
+                coll.Add(item);
             }
-            return obsTransporters;
+            return coll;
         }
 
-        public static async Task<ObservableCollection<Transporter>> SearchTransporter(Transporter transporter) 
+        public static async Task<ObservableCollection<TransporterExt>> SearchTransporter(TransporterExt transporter) 
         {
-            List<Transporter> trans;
+            List<TransporterExt> list;
 
             using (var db = new SQLiteConnection(dbPath))
             {
-                var tmp = from p in db.Table<Transporter>() select p;
+                var tmp = from p in db.Table<TransporterExt>() select p;
                
-                if (!string.IsNullOrEmpty(transporter.trId))
-                    tmp = tmp.Where(p => p.trId.Contains(transporter.trId));
+                if (transporter.trId !=null)
+                    tmp = tmp.Where(p => p.trId==transporter.trId);
                 
-                if (!string.IsNullOrEmpty(transporter.trName))
-                    tmp = tmp.Where(p => p.trName.Contains(transporter.trName));
+                if (!string.IsNullOrEmpty(transporter.code))
+                    tmp = tmp.Where(p => p.code.Contains(transporter.code));
                 
-                if (!string.IsNullOrEmpty(transporter.trUrl))
-                    tmp = tmp.Where(p => p.trUrl.Contains(transporter.trUrl));
+                if (!string.IsNullOrEmpty(transporter.url))
+                    tmp = tmp.Where(p => p.url.Contains(transporter.url));
 
-                if (!string.IsNullOrEmpty(transporter.trCode))
-                    tmp = tmp.Where(p => p.trCode.Contains( transporter.trCode));
+                if (!string.IsNullOrEmpty(transporter.name))
+                    tmp = tmp.Where(p => p.name.Contains(transporter.name));
 
-                trans = tmp.ToList();
+                list = tmp.ToList();
 
             }
-            var obsTransporters = new ObservableCollection<Transporter>();
-            foreach (var item in trans)
+            var coll = new ObservableCollection<TransporterExt>();
+            foreach (var item in list)
             {
-                obsTransporters.Add(item);
+                coll.Add(item);
             }
-            return obsTransporters;
+            return coll;
         }
-        
-        // search by Transporter.Id
-        public static async Task<Transporter> GetTransporterById(string id)
+
+
+        // search transporter StartsWith
+        public static async Task<ObservableCollection<TransporterExt>> SearchTransporter_StartsWith(TransporterExt transporter)
         {
+            List<TransporterExt> list;
+
             using (var db = new SQLiteConnection(dbPath))
             {
-                Transporter trans = (from p in db.Table<Transporter>()
-                                     where p.trId.Equals( id )
-                                     select p).FirstOrDefault();
+                var tmp = from p in db.Table<TransporterExt>() select p;
 
-                return trans;
-            }
+                if (transporter.trId != null)
+                    tmp = tmp.Where(p => p.trId == transporter.trId);
 
-        }
-        
-        // seach by Transporter.Name
-        public static async Task<ObservableCollection<Transporter>> GetTransporterByName(string name)
-        {
-            List<Transporter> trans;
-            using (var db = new SQLiteConnection(dbPath)) 
-            {
-                trans = (from p in db.Table<Transporter>() 
-                         where p.trName.Contains(name) 
-                         select p).ToList();
+                if (!string.IsNullOrEmpty(transporter.code))
+                    tmp = tmp.Where(p => p.code.StartsWith(transporter.code));
+
+                if (!string.IsNullOrEmpty(transporter.url))
+                    tmp = tmp.Where(p => p.url.StartsWith(transporter.url));
+
+                if (!string.IsNullOrEmpty(transporter.name))
+                    tmp = tmp.Where(p => p.name.StartsWith(transporter.name));
+
+                list = tmp.ToList();
+
             }
-            var obsTransporters = new ObservableCollection<Transporter>();
-            foreach (var item in trans)
+            var coll = new ObservableCollection<TransporterExt>();
+            foreach (var item in list)
             {
-                obsTransporters.Add(item);
+                coll.Add(item);
             }
-            return obsTransporters;
+            return coll;
         }
 
-
-        // search by Transporter.Url  
-        public static async Task<ObservableCollection<Transporter>> GetTransporterByUrl(string url)
-        {
-            List<Transporter> trans;
-            using (var db = new SQLiteConnection(dbPath))
-            {
-                trans = (from p in db.Table<Transporter>() where p.trUrl.Contains(url) select p).ToList();
-            }
-            var obsTransporters = new ObservableCollection<Transporter>();
-            foreach (var item in trans)
-            {
-                obsTransporters.Add(item);
-            }
-            return obsTransporters;
-        }
-
-        // search by Transporter.Code 
-        public static async Task<ObservableCollection<Transporter>> GetTransporterByCode(string code)
-        {
-            List<Transporter> trans;
-            using (var db = new SQLiteConnection(dbPath))
-            {
-                trans = (from p in db.Table<Transporter>() where p.trCode.Contains(code) select p).ToList();
-            }
-            var obsTransporters = new ObservableCollection<Transporter>();
-            foreach (var item in trans)
-            {
-                obsTransporters.Add(item);
-            }
-            return obsTransporters;
-        } 
-
-        /* DEBUG FUNCTIONS */
-
-        //ci ritorna l'id cercato...funzione usata per qlc debug..mi sa che se po levà
-        public static async Task<Int32> GetTransporterId(int transId)
-        {
-            using (var db = new SQLiteConnection(dbPath))
-            {
-                Transporter trans = (from p in db.Table<Transporter>()
-                                     where p.trId==Convert.ToString(transId)
-                                     select p).FirstOrDefault();
-
-                return trans.Id;
-            }
-
-        }
-
+      
         
     }//end class
 }

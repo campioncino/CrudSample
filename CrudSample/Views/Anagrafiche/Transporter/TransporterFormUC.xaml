@@ -7,29 +7,29 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <!--d:DesignHeight="300"
-    d:DesignWidth="400">-->
+    d:DesignWidth="400"-->
     
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock Text="Transporter" FontWeight="Bold" Width="150" FontSize="24"  HorizontalAlignment="Left" />
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="TruckId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
+            <StackPanel Orientation="Horizontal" Visibility="Collapsed">
+                <TextBlock x:Name="TransporterId" Text="Id" FontWeight="Bold" Width="150" FontSize="24"/>
                 <TextBox x:Name="_trId" InputScope="Number" Text="{Binding Path=trId, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TruckName" Text="Name" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trName" Text="{Binding Path=trName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                <TextBlock x:Name="TransporterName" Text="Name" FontWeight="Bold" Width="150" FontSize="24"/>
+                <TextBox x:Name="_trName" Text="{Binding Path=name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TruckCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trCode" Text="{Binding Path=trCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                <TextBlock x:Name="TransporterCode" Text="Code" FontWeight="Bold" Width="150" FontSize="24"/>
+                <TextBox x:Name="_trCode" Text="{Binding Path=code, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="TruckUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
-                <TextBox x:Name="_trUrl" Text="{Binding Path=trUrl, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                <TextBlock x:Name="TransporterUrl" Text="Url" FontWeight="Bold" Width="150" FontSize="24"/>
+                <TextBox x:Name="_trUrl" Text="{Binding Path=url, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      Width="300" Margin="20,0,20,0" HorizontalAlignment="Left"/>
             </StackPanel>
         </StackPanel>

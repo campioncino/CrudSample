@@ -23,7 +23,6 @@ namespace CrudSample.Views.Anagrafiche.Transporter
     
     using CrudSample.Business.Dao;
     using System.Collections.ObjectModel;
-    using CrudSample.Views.Anagrafiche.Truck;
     using System.Diagnostics;
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
@@ -34,13 +33,11 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
-        public ObservableCollection<Transporter> Transporters { get; set; }
+        public ObservableCollection<TransporterExt> list { get; set; }
 
-        public ObservableCollection<Transporter> seachResult = null;
+        public ObservableCollection<TransporterExt> seachResult = null;
 
-        public string fromTruckPage = null;
-
-        public Transporter transporter { get; set; }
+        public TransporterExt transporter { get; set; }
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -81,44 +78,25 @@ namespace CrudSample.Views.Anagrafiche.Transporter
         /// session. The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            seachResult = e.NavigationParameter as ObservableCollection<Transporter>;
+            seachResult = e.NavigationParameter as ObservableCollection<TransporterExt>;
             if (seachResult != null) {
-                Transporters = seachResult;
+                list = seachResult;
             }
             else
             {
-                Transporters = await TransporterService.GetAll();
+                list = await TransporterService.GetAll();
             }
 
-            fromTruckPage = e.NavigationParameter as string;
-
-            transporterList.getList.ItemsSource = Transporters;
+            transporterList.getList.ItemsSource = list;
         }
 
 
         public async void transporterList_SelectionChangedEvent(object sender, EventArgs e)
         {
            
-            transporter = (Transporter)transporterList.getList.SelectedItem;
+            transporter = (TransporterExt)transporterList.getList.SelectedItem;
 
             Frame.Navigate(typeof(TransporterCrudPage), transporter);
-
-            ////se vengo dalla pagina di TruckCrud
-            //if (fromTruckPage != null) { 
-            //    if (fromTruckPage.Contains("Crud"))
-            //    {
-            //        Frame.Navigate(typeof(TruckCrudPage),transporter);
-            //    }
-            //    else 
-            //    {
-            //        Frame.Navigate(typeof(TruckSearchPage), transporter);
-            //    }
-            //}
-            //else
-            //{
-            //    //ci spostiamo sulla pagina dettaglio
-            //    Frame.Navigate(typeof(TransporterCrudPage), transporter);
-            //}
             
             
         }
@@ -172,23 +150,10 @@ namespace CrudSample.Views.Anagrafiche.Transporter
 
         private async void Btn_RefreshTransporter(object sender, RoutedEventArgs e)
         {
-            Transporters = await TransporterService.GetAll();
+            list = await TransporterService.GetAll();
             this.Frame.Navigate(this.GetType());
         }
 
-
-        // funzione delete
-        //private async void Btn_DeleteTransporter(object sender, RoutedEventArgs e)
-        //{
-        //    if (transporter != null)
-
-        //        await TransporterService.DeleteTransporter(transporter);
-                
-        //        //reload Page
-        //        this.Frame.Navigate(this.GetType());
-        //}
-
-       
     }
     
 }
